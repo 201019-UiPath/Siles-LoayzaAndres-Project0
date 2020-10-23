@@ -1,0 +1,11 @@
+{
+  "version": 2,
+  "dgSpecHash": "KWeTR5xUccAgzgsIEnvGT6fHtbfuFLoHJmyyoGfdWqxObKILXpJvPpk/MFmXMrsaSSP6w/9lY2JA8dwpTGtlLA==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreDB\\StoreDB.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Cito\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\Cito\\.nuget\\packages\\netstandard.library\\2.0.3\\netstandard.library.2.0.3.nupkg.sha512"
+  ],
+  "logs": []
+}
