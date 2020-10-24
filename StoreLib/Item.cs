@@ -60,6 +60,12 @@ namespace StoreLib
         private string description;
 
 
+        public Item(float price, int locId) 
+        {
+            this.id = this.GetHashCode();
+            this.price = price;
+            this.locId = locId;
+        }
 
     }
 }

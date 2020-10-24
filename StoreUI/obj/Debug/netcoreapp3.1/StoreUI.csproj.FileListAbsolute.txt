@@ -11,3 +11,10 @@ C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\ne
 C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\obj\Debug\netcoreapp3.1\StoreUI.dll
 C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\obj\Debug\netcoreapp3.1\StoreUI.pdb
 C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\obj\Debug\netcoreapp3.1\StoreUI.genruntimeconfig.cache
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreBL.dll
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreDB.dll
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreLib.dll
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreBL.pdb
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreLib.pdb
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\bin\Debug\netcoreapp3.1\StoreDB.pdb
+C:\Users\Cito\Revature\Training\Siles-LoayzaAndres-Project0\StoreUI\obj\Debug\netcoreapp3.1\StoreUI.csproj.CopyComplete

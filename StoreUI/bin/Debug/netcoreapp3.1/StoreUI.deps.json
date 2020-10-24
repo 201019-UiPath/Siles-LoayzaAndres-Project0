@@ -7,14 +7,55 @@
   "targets": {
     ".NETCoreApp,Version=v3.1": {
       "StoreUI/1.0.0": {
+        "dependencies": {
+          "StoreBL": "1.0.0",
+          "StoreLib": "1.0.0"
+        },
         "runtime": {
           "StoreUI.dll": {}
+        }
+      },
+      "StoreBL/1.0.0": {
+        "dependencies": {
+          "StoreDB": "1.0.0",
+          "StoreLib": "1.0.0"
+        },
+        "runtime": {
+          "StoreBL.dll": {}
+        }
+      },
+      "StoreDB/1.0.0": {
+        "dependencies": {
+          "StoreLib": "1.0.0"
+        },
+        "runtime": {
+          "StoreDB.dll": {}
+        }
+      },
+      "StoreLib/1.0.0": {
+        "runtime": {
+          "StoreLib.dll": {}
         }
       }
     }
   },
   "libraries": {
     "StoreUI/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StoreBL/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StoreDB/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "StoreLib/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

@@ -6,7 +6,8 @@ namespace StoreUI
     {
         static void Main(string[] args)
         {
-            MainMenu.Start();
+            Menu menu = new MainMenu();
+            menu.Start();
         }
     }
 }

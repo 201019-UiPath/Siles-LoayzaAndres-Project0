@@ -25,6 +25,16 @@
         "build": {
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
+      },
+      "StoreLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/StoreLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/StoreLib.dll": {}
+        }
       }
     }
   },
@@ -172,11 +182,17 @@
         "netstandard.library.2.0.3.nupkg.sha512",
         "netstandard.library.nuspec"
       ]
+    },
+    "StoreLib/1.0.0": {
+      "type": "project",
+      "path": "../StoreLib/StoreLib.csproj",
+      "msbuildProject": "../StoreLib/StoreLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
-      "NETStandard.Library >= 2.0.3"
+      "NETStandard.Library >= 2.0.3",
+      "StoreLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -202,7 +218,11 @@
       },
       "frameworks": {
         "netstandard2.0": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreLib\\StoreLib.csproj": {
+              "projectPath": "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreLib\\StoreLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {

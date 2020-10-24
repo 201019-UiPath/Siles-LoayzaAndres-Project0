@@ -25,6 +25,29 @@
         "build": {
           "build/netstandard2.0/NETStandard.Library.targets": {}
         }
+      },
+      "StoreDB/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "dependencies": {
+          "StoreLib": "1.0.0"
+        },
+        "compile": {
+          "bin/placeholder/StoreDB.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/StoreDB.dll": {}
+        }
+      },
+      "StoreLib/1.0.0": {
+        "type": "project",
+        "framework": ".NETStandard,Version=v2.0",
+        "compile": {
+          "bin/placeholder/StoreLib.dll": {}
+        },
+        "runtime": {
+          "bin/placeholder/StoreLib.dll": {}
+        }
       }
     }
   },
@@ -172,11 +195,23 @@
         "netstandard.library.2.0.3.nupkg.sha512",
         "netstandard.library.nuspec"
       ]
+    },
+    "StoreDB/1.0.0": {
+      "type": "project",
+      "path": "../StoreDB/StoreDB.csproj",
+      "msbuildProject": "../StoreDB/StoreDB.csproj"
+    },
+    "StoreLib/1.0.0": {
+      "type": "project",
+      "path": "../StoreLib/StoreLib.csproj",
+      "msbuildProject": "../StoreLib/StoreLib.csproj"
     }
   },
   "projectFileDependencyGroups": {
     ".NETStandard,Version=v2.0": [
-      "NETStandard.Library >= 2.0.3"
+      "NETStandard.Library >= 2.0.3",
+      "StoreDB >= 1.0.0",
+      "StoreLib >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -202,7 +237,14 @@
       },
       "frameworks": {
         "netstandard2.0": {
-          "projectReferences": {}
+          "projectReferences": {
+            "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreDB\\StoreDB.csproj": {
+              "projectPath": "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreDB\\StoreDB.csproj"
+            },
+            "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreLib\\StoreLib.csproj": {
+              "projectPath": "C:\\Users\\Cito\\Revature\\Training\\Siles-LoayzaAndres-Project0\\StoreLib\\StoreLib.csproj"
+            }
+          }
         }
       },
       "warningProperties": {
