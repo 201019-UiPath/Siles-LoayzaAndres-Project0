@@ -24,8 +24,8 @@ namespace StoreLib
         /// <summary>
         /// Price in USD for this item
         /// </summary>
-        private float price;
-        public float Price
+        private decimal price;
+        public decimal Price
         {
             get {
                 return price;
@@ -73,14 +73,29 @@ namespace StoreLib
             }
         }
 
+        private int numOfStock;
+        public int NumOfStock
+        {
+            get
+            {
+                return numOfStock;
+            }
+        }
 
-        public Item(float price, int locId, string name, string description) 
+
+        public Item(decimal price, int locId, string name, string description, int numOfStock) 
         {
             this.id = this.GetHashCode();
             this.price = price;
             this.locId = locId;
             this.name = name;
             this.description = description;
+            this.numOfStock = numOfStock;
+        }
+
+        public void AddStock(int add)
+        {
+            this.numOfStock += add;
         }
 
     }

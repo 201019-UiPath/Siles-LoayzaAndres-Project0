@@ -10,6 +10,8 @@ namespace StoreUI
 
         public abstract void Start();
 
+        public abstract void StartAdmin();
+
         protected bool UserInputIsX()
         {
             string validXpattern = "x|X";

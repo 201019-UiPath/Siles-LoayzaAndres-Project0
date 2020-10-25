@@ -20,6 +20,28 @@ namespace StoreUI
                         subMenu = new ShopMenu();
                         subMenu.Start();
                         break;
+                    case "A":
+                        StartAdmin();
+                        break;
+                }
+            } while (!UserInputIsX());
+        }
+
+        public override void StartAdmin()
+        {
+            do
+            {
+                Console.WriteLine("\nWelcome to the admin menu!");
+                Console.WriteLine("What would you like to do today?");
+                Console.WriteLine("[0] Add Inventory");
+                Console.WriteLine("[X] Quit");
+                userInput = Console.ReadLine();
+                switch (userInput)
+                {
+                    case "0":
+                        subMenu = new ShopMenu();
+                        subMenu.StartAdmin();
+                        break;
                 }
             } while (!UserInputIsX());
         }
