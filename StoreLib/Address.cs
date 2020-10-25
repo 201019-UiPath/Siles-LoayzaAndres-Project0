@@ -3,10 +3,49 @@ namespace StoreLib
     public class Address
     {
         private string street;
+        public string Street
+        {
+            get
+            {
+                return street;
+            }
+        }
+
         private string city;
+        public string City
+        {
+            get
+            {
+                return city;
+            }
+        }
+
         private int zip;
+        public int Zip
+        {
+            get
+            {
+                return zip;
+            }
+        }
+
         private string state;
+        public string State
+        {
+            get
+            {
+                return state;
+            }
+        }
+
         private string country;
+        public string Country
+        {
+            get
+            {
+                return country;
+            }
+        }
 
         public Address()
         {

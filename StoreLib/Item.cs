@@ -53,18 +53,34 @@ namespace StoreLib
         /// Short descriptive name for product
         /// </summary>
         private string name;
+        public string Name 
+        {
+            get
+            {
+                return name;
+            }
+        }
 
         /// <summary>
         /// Description for product
         /// </summary>
         private string description;
+        public string Description
+        {
+            get
+            {
+                return description;
+            }
+        }
 
 
-        public Item(float price, int locId) 
+        public Item(float price, int locId, string name, string description) 
         {
             this.id = this.GetHashCode();
             this.price = price;
             this.locId = locId;
+            this.name = name;
+            this.description = description;
         }
 
     }

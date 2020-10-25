@@ -1,10 +1,13 @@
 using System.Collections.Generic;
 using StoreLib;
+using System.Threading.Tasks;
 
 namespace StoreDB
 {
-    public interface IRepo
+    public interface IShopRepo
     {
+         Task<List<ILocation>> GetLocationsFromFile();
+
          List<ILocation> GetLocations();
     }
 }

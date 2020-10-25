@@ -31,17 +31,27 @@ namespace StoreLib
         }
 
         /// <summary>
-        /// Inventory for all items in this location
+        /// Address for this store's location.
         /// </summary>
-        private Inventory locInventory;
-        public Inventory LocInventory {get; set;}
-
         private Address locAddress;
-
-        public Location(string name)
+        public Address LocAddress
         {
+            get
+            {
+                return locAddress;
+            }
+        }
+
+        public Location()
+        {
+
+        }
+
+        public Location(int id, string name, Address address)
+        {
+            this.id = id;
             this.name = name;
-            //this.LocInventory = inventory;
+            this.locAddress = address;
         }
 
     }

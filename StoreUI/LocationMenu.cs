@@ -16,8 +16,8 @@ namespace StoreUI
         {
             do
             {
-
-                Console.WriteLine("\nSelect from our stock.");
+                Console.WriteLine($"\nWelcome to our {location.Name} location!");
+                Console.WriteLine("Select from our stock.");
                 Console.WriteLine("[0] ...");
                 Console.WriteLine("[X] Back to Shop Menu");
                 userInput = Console.ReadLine();
