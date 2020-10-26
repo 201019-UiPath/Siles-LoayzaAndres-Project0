@@ -1,4 +1,4 @@
-﻿using StoreBL;
+﻿
 
 namespace StoreUI
 {
@@ -8,11 +8,6 @@ namespace StoreUI
         {
             Menu menu = new MainMenu();
             menu.Start();
-            
-            /*
-            Shop shop = new Shop();
-            shop.CreateLocations();
-            */
         }
     }
 }

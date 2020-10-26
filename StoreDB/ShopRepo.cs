@@ -52,9 +52,9 @@ namespace StoreDB
         {
             //dummy data
             locations = new List<Location>();
-            locations.Add(new Location(1, "Washington, DC", new Address("123 Main St", "Washington", 12345, "DC", "USA")));
-            locations.Add(new Location(1, "Sterling, VA", new Address("123 Main St", "Sterling", 12345, "VA", "USA")));
-            locations.Add(new Location(2, "Frederick, MD", new Address("123 Main St", "Frederick", 12345, "MD", "USA")));            
+            locations.Add(new Location("Washington, DC", new Address("123 Main St", "Washington", 12345, "DC", "USA")));
+            locations.Add(new Location("Sterling, VA", new Address("123 Main St", "Sterling", 12345, "VA", "USA")));
+            locations.Add(new Location("Frederick, MD", new Address("123 Main St", "Frederick", 12345, "MD", "USA")));            
         }
 
         public async void WriteLocationsToFile()

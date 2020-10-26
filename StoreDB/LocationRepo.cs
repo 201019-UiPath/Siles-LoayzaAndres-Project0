@@ -5,10 +5,10 @@ namespace StoreDB
 {
     public static class LocationRepo
     {
-        public static Dictionary<string, Item> GetInventory(int locationId)
+        public static Dictionary<string, Item> GetInventory()
         {
             Dictionary<string, Item> inventory = new Dictionary<string, Item>();
-            inventory.Add("Apple", new Item(System.Convert.ToDecimal(1.99), 0, "Apple", "This is an apple.", 30));
+            inventory.Add("Apple", new Item(1.99M, "Apple", "This is an apple.", 30));
 
             return inventory;
         }

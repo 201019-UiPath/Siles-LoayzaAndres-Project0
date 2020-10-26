@@ -5,12 +5,20 @@ namespace StoreBL
 {
     public interface ILocationBL
     {
-        Dictionary<string, Item> GetInventory();
+        int GetInventoryCount();
 
-         void AddItem(Item item);
+        string[] GetAllItemKeys();
 
-         bool HasItem (string name);
+        void AddItemToInventory(Item item);
 
-         void AddStock(string name, int add);
+        void WriteInventory();
+
+        bool HasItem (string name);
+
+        void AddItemToCart(string key, int amount);
+
+        void WriteCart();
+
+        void AddStock(string name, int add);
     }
 }

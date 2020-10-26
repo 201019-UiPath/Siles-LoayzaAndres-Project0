@@ -10,12 +10,16 @@ namespace StoreUI
 
         public abstract void Start();
 
-        public abstract void StartAdmin();
-
         protected bool UserInputIsX()
         {
             string validXpattern = "x|X";
             return Regex.IsMatch(userInput, validXpattern);
+        }
+
+        protected bool UserInputIsInt()
+        {
+            string validIntpattern = "^[0-9]+$";
+            return Regex.IsMatch(userInput, validIntpattern);
         }
     }
 

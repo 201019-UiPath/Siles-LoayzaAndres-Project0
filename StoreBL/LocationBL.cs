@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StoreLib;
 using StoreDB;
@@ -8,33 +9,72 @@ namespace StoreBL
     {
         private ILocation location;
         private Dictionary<string, Item> inventory;
+        private ICart cart;
 
         public LocationBL(ILocation location)
         {   
             this.location = location;
-            inventory = GetInventory();
+            inventory = LocationRepo.GetInventory();
+            cart = new Cart();
         }
 
-        public Dictionary<string, Item> GetInventory()
+        public int GetInventoryCount()
         {
-            return LocationRepo.GetInventory(location.Id);
+            return this.inventory.Count;
         }
 
-        public void AddItem(Item item)
+        public string[] GetAllItemKeys()
+        {
+            string[] itemKeys = new string[inventory.Count];
+            int i=0;
+            foreach(var pair in inventory)
+            {
+                itemKeys[i] = pair.Value.Name;
+                i++;
+            }
+            return itemKeys;
+        }
+
+        public void AddItemToInventory(Item item)
         {
             if (!inventory.ContainsKey(item.Name))
             {
                 inventory.Add(item.Name, item);
             }
             else {
-                //SHOULD ADD EXCEPTION HERE
                 System.Console.WriteLine("Error! Product already exists!");
+            }
+        }
+
+        public void WriteInventory()
+        {
+            int i=0;
+            foreach(var pair in inventory)
+            {
+                Console.Write($"[{i}] ");
+                pair.Value.Write();
+                i++;
             }
         }
 
         public bool HasItem(string name)
         {
             return inventory.ContainsKey(name);
+        }
+
+        public void AddItemToCart(string key, int amount)
+        {
+            if (amount>inventory[key].NumOfStock)
+            {
+                throw new ArgumentException("Not enough stock in inventory.");
+            }
+            cart.AddItem(inventory[key], amount); //add stock to cart
+            inventory[key].NumOfStock -= amount; //reduce stock
+        }
+
+        public void WriteCart()
+        {
+            cart.Write();
         }
 
         public void AddStock(string name, int add)
@@ -45,7 +85,6 @@ namespace StoreBL
             }
             else
             {
-                //SHOULD ADD EXCEPTION HERE
                 System.Console.WriteLine("Error! Product not found!");
             }
         }

@@ -7,18 +7,6 @@ namespace StoreLib
     public class Location : ILocation
     {
         /// <summary>
-        /// ID number for the store location
-        /// </summary>
-        private int id;
-        public int Id 
-        {
-            get
-            {
-                return id;
-            }
-        }
-
-        /// <summary>
         /// Name of location used in UI
         /// </summary>
         private string name;
@@ -42,14 +30,8 @@ namespace StoreLib
             }
         }
 
-        public Location()
+        public Location(string name, Address address)
         {
-
-        }
-
-        public Location(int id, string name, Address address)
-        {
-            this.id = id;
             this.name = name;
             this.locAddress = address;
         }

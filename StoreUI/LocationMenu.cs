@@ -8,13 +8,15 @@ namespace StoreUI
 {
     internal class LocationMenu : Menu
     {
-        private ILocation location;
-        private ILocationBL locationBL;
+        protected ILocation location;
+        protected ILocationBL locationBL;
+        protected string[] inventoryKeys;
 
         public LocationMenu(ILocation location)
         {
             this.location = location;
             this.locationBL = new LocationBL(location);
+            this.inventoryKeys = locationBL.GetAllItemKeys();
         }
 
         public override void Start()
@@ -22,103 +24,84 @@ namespace StoreUI
             do
             {
                 Console.WriteLine($"\nWelcome to our {location.Name} location!");
-                Console.WriteLine("Select from our stock.");
-                Console.WriteLine("[0] View inventory");
+                Console.WriteLine("[0] View products");
                 Console.WriteLine("[1] View cart");
-                Console.WriteLine("[X] Back to Shop Menu");
+                Console.WriteLine("[X] Back to previous menu");
                 userInput = Console.ReadLine();
-            } while (!UserInputIsX());
-        }
-
-        public override void StartAdmin()
-        {
-            do
-            {
-                Console.WriteLine($"\nWelcome to our {location.Name} location, admin!");
-                Console.WriteLine("[0] View inventory");
-                Console.WriteLine("[1] Add stock");
-                Console.WriteLine("[2] Add new product");
-                Console.WriteLine("[X] Back to location select");
-                userInput = Console.ReadLine();
-                switch(userInput)
+                switch (userInput)
                 {
                     case "0":
-                        WriteStock();
+                        ViewProducts();
                         break;
                     case "1":
-                        AddStock();
-                        break;
-                    case "2":
-                        AddNewProduct();
+                        ViewCart();
                         break;
                 }
             } while (!UserInputIsX());
         }
 
-        protected void WriteStock()
+        protected void ViewProducts()
         {
-            Dictionary<string, Item> inventory = locationBL.GetInventory();
-            foreach(var pair in inventory)
+            do 
             {
-                Item item = pair.Value;
-                Console.WriteLine($"\n{item.Name}");
-                Console.WriteLine($"    Price: ${item.Price}");
-                Console.WriteLine($"    Description: {item.Description}");
-                Console.WriteLine($"    In Stock: {item.NumOfStock}");
-            }
+                Console.WriteLine($"Viewing products for {location.Name} location!");
+                Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
+                locationBL.WriteInventory();
+                userInput = Console.ReadLine();
+                if (UserInputIsInt() && int.Parse(userInput)<locationBL.GetInventoryCount())
+                {
+                    this.AddItemToCart( inventoryKeys[int.Parse(userInput)] );
+                }
+                else
+                {
+                    Console.WriteLine("Invalid input. Please enter an integer value.");
+                }
+            } while (!UserInputIsX());
+            userInput = "";
         }
 
-        protected void AddStock()
+        private void ViewCart()
         {
-            Console.WriteLine("\nAdding stock to existing product...");
-            Console.Write("Enter product name exactly: ");
-            string itemName = Console.ReadLine();
-            if (locationBL.HasItem(itemName))
+            do
             {
-                Console.WriteLine($"\nAdding stock to {itemName}...");
-                Console.Write("Enter amount of stock being added: ");
-                int stockAdded = int.Parse(Console.ReadLine());
-                locationBL.AddStock(itemName, stockAdded);
-            }
-            else 
-            {
-                Console.WriteLine("Product not found. Press any key to go back.");
-                Console.Read();
-            }
+                Console.WriteLine("Viewing cart.");
+                locationBL.WriteCart();
+                Console.WriteLine("[0] Remove item");
+                Console.WriteLine("[1] Empty cart");
+                Console.WriteLine("[2] Checkout order");
+                Console.WriteLine("[X] Return to previous menu");
+                userInput = Console.ReadLine();
+            } while(!UserInputIsX());
+            userInput = "";
         }
 
-        protected void AddNewProduct()
+        private void AddItemToCart(string itemKey)
         {
-            Console.WriteLine("\nAdding new product...");
-            Console.Write("Enter product name: ");
-            string itemName = Console.ReadLine();
-            Console.WriteLine("\nAdding new product...");
-            Console.Write("Enter product description: ");
-            string itemDescript = Console.ReadLine();
-            Console.WriteLine("\nAdding new product...");
-            Console.Write("Enter product price: $");
-            decimal itemPrice = decimal.Round(decimal.Parse(Console.ReadLine()), 2);
-            Console.WriteLine("\nAdding new product...");
-            Console.Write("Enter initial number of stock: ");
-            int numOfStock = int.Parse(Console.ReadLine());
-
-            Console.WriteLine("\nConfirm new product (Y/N)?");
-            Console.WriteLine($"    Name: {itemName}");
-            Console.WriteLine($"    Description: {itemDescript}");
-            Console.WriteLine($"    Price: ${itemPrice}");
-            Console.WriteLine($"    Number of stock: {numOfStock}");
-            string confirm = Console.ReadLine();
-            if (Regex.IsMatch(confirm, "y|Y"))
+            do
             {
-                locationBL.AddItem(new Item(itemPrice, location.Id, itemName, itemDescript, numOfStock));
-                Console.WriteLine("New product added!");
-            }
-            else
-            {
-                Console.WriteLine("New product cancelled. Press any key to go back.");
-                Console.Read();
-            }
-            
+                Console.WriteLine($"\nAdding \"{itemKey}\" to cart. Enter X to cancel.");
+                Console.Write($"Enter amount for \"{itemKey}\": ");
+                userInput = Console.ReadLine();
+                int amount = 1;
+                if (UserInputIsInt())
+                {
+                    amount = int.Parse(userInput);
+                    try
+                    {
+                        locationBL.AddItemToCart(itemKey, amount);
+                    }
+                    catch (ArgumentException e)
+                    {
+                        Console.WriteLine($"Failed to add {itemKey} to cart. {e.Message}");
+                    }
+                    break;
+                }
+                else if (!UserInputIsX())
+                {
+                    Console.WriteLine("Invalid input. Please enter integer value or X to cancel.");
+                }
+            } while (!UserInputIsX());
+            userInput = "";
         }
     }
 }

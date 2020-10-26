@@ -28,18 +28,6 @@ namespace StoreUI
             } while (!UserInputIsX());
         }
 
-        public override void StartAdmin()
-        {
-            do
-            {
-                Console.WriteLine("\nWelcome to the admin store selection!");
-                Console.WriteLine("Please select a store location.");
-                writeLocations();
-                Console.WriteLine("[X] Back to Main Menu");
-                readAdminInput();
-            } while (!UserInputIsX());
-        }
-
         /// <summary>
         /// Outputs the list of locations into the console, each preceded by 
         /// its index.
@@ -60,7 +48,7 @@ namespace StoreUI
         /// creates a new LocationMenu, assigns subMenu, and calls Start().
         /// Else, returns void.
         /// </summary>
-        protected void readInput()
+        protected virtual void readInput()
         {
             userInput = Console.ReadLine();
                 foreach(var location in locations)
@@ -69,20 +57,6 @@ namespace StoreUI
                     {
                         subMenu = new LocationMenu(location);
                         subMenu.Start();
-                        break;
-                    }
-                }
-        }
-
-        protected void readAdminInput()
-        {
-            userInput = Console.ReadLine();
-                foreach(var location in locations)
-                {
-                    if (userInput==locationIndex(location))
-                    {
-                        subMenu = new LocationMenu(location);
-                        subMenu.StartAdmin();
                         break;
                     }
                 }

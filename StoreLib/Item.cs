@@ -36,20 +36,6 @@ namespace StoreLib
         }
 
         /// <summary>
-        /// ID number of Location associated with this product
-        /// </summary>
-        private int locId;
-        public int LocId
-        {
-            get {
-                return locId;
-            }
-            set {
-                locId = value;
-            }
-        }
-
-        /// <summary>
         /// Short descriptive name for product
         /// </summary>
         private string name;
@@ -80,14 +66,17 @@ namespace StoreLib
             {
                 return numOfStock;
             }
+            set
+            {
+                numOfStock = value;
+            }
         }
 
 
-        public Item(decimal price, int locId, string name, string description, int numOfStock) 
+        public Item(decimal price, string name, string description, int numOfStock) 
         {
             this.id = this.GetHashCode();
-            this.price = price;
-            this.locId = locId;
+            this.price = decimal.Round(price, 2);
             this.name = name;
             this.description = description;
             this.numOfStock = numOfStock;
@@ -96,6 +85,14 @@ namespace StoreLib
         public void AddStock(int add)
         {
             this.numOfStock += add;
+        }
+
+        public void Write()
+        {
+            Console.WriteLine($"{this.name}");
+            Console.WriteLine($"    Price: ${this.Price}");
+            Console.WriteLine($"    Description: {this.Description}");
+            Console.WriteLine($"    In Stock: {this.NumOfStock}");
         }
 
     }
