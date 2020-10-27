@@ -2,11 +2,10 @@ using System.Text.RegularExpressions;
 
 namespace StoreUI
 {
-    public abstract class Menu
+    internal abstract class Menu
     {
         protected string userInput;
         protected Menu subMenu;
-        protected Menu prevMenu;
 
         public abstract void Start();
 

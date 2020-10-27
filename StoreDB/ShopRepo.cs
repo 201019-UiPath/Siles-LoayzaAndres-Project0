@@ -1,4 +1,4 @@
-﻿using StoreLib;
+using StoreLib;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading.Tasks;
@@ -18,7 +18,7 @@ namespace StoreDB
         /// Returns a list of all locations available
         /// </summary>
         /// <returns></returns>
-        public async Task<List<ILocation>> GetLocationsFromFile()
+        public async Task<List<Location>> GetLocationsFromFile()
         {
             //get Location objects from JSON
             List<Location> locations;
@@ -28,7 +28,7 @@ namespace StoreDB
             }
 
             //convert List<Location> to List<ILocation>
-            List<ILocation> result = new List<ILocation>(); 
+            List<Location> result = new List<Location>(); 
             foreach (var loc in locations)
             {
                 result.Add(loc);
@@ -37,10 +37,10 @@ namespace StoreDB
             return result;
         }
 
-        public List<ILocation> GetLocations()
+        public List<Location> GetLocations()
         {
             CreateLocations();
-            List<ILocation> result = new List<ILocation>(); 
+            List<Location> result = new List<Location>(); 
             foreach (var loc in locations)
             {
                 result.Add(loc);

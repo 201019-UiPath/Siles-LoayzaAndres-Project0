@@ -6,8 +6,8 @@ namespace StoreDB
 {
     public interface IShopRepo
     {
-         Task<List<ILocation>> GetLocationsFromFile();
+         Task<List<Location>> GetLocationsFromFile();
 
-         List<ILocation> GetLocations();
+         List<Location> GetLocations();
     }
 }

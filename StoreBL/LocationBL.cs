@@ -7,12 +7,13 @@ namespace StoreBL
 {
     public class LocationBL : ILocationBL
     {
-        private ILocation location;
-        private Dictionary<string, Item> inventory;
-        private ICart cart;
+        private Location location;
+        private Dictionary<string, Product> inventory;
+        private HashSet<Product> products;
+        private Cart cart;
 
-        public LocationBL(ILocation location)
-        {   
+        public LocationBL(Location location)
+        {
             this.location = location;
             inventory = LocationRepo.GetInventory();
             cart = new Cart();
@@ -23,23 +24,23 @@ namespace StoreBL
             return this.inventory.Count;
         }
 
-        public string[] GetAllItemKeys()
+        public string[] GetAllProductKeys()
         {
-            string[] itemKeys = new string[inventory.Count];
+            string[] productKeys = new string[inventory.Count];
             int i=0;
             foreach(var pair in inventory)
             {
-                itemKeys[i] = pair.Value.Name;
+                productKeys[i] = pair.Value.Name;
                 i++;
             }
-            return itemKeys;
+            return productKeys;
         }
 
-        public void AddItemToInventory(Item item)
+        public void AddProductToInventory(Product product)
         {
-            if (!inventory.ContainsKey(item.Name))
+            if (!inventory.ContainsKey(product.Name))
             {
-                inventory.Add(item.Name, item);
+                inventory.Add(product.Name, product);
             }
             else {
                 System.Console.WriteLine("Error! Product already exists!");
@@ -57,18 +58,18 @@ namespace StoreBL
             }
         }
 
-        public bool HasItem(string name)
+        public bool HasProduct(string name)
         {
             return inventory.ContainsKey(name);
         }
 
-        public void AddItemToCart(string key, int amount)
+        public void AddProductToCart(string key, int amount)
         {
             if (amount>inventory[key].NumOfStock)
             {
                 throw new ArgumentException("Not enough stock in inventory.");
             }
-            cart.AddItem(inventory[key], amount); //add stock to cart
+            cart.AddProduct(inventory[key], amount); //add stock to cart
             inventory[key].NumOfStock -= amount; //reduce stock
         }
 
@@ -79,7 +80,7 @@ namespace StoreBL
 
         public void AddStock(string name, int add)
         {
-            if (HasItem(name))
+            if (HasProduct(name))
             {
                 inventory[name].AddStock(add);
             }

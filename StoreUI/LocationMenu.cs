@@ -8,15 +8,15 @@ namespace StoreUI
 {
     internal class LocationMenu : Menu
     {
-        protected ILocation location;
+        protected Location location;
         protected ILocationBL locationBL;
         protected string[] inventoryKeys;
 
-        public LocationMenu(ILocation location)
+        public LocationMenu(Location location)
         {
             this.location = location;
             this.locationBL = new LocationBL(location);
-            this.inventoryKeys = locationBL.GetAllItemKeys();
+            this.inventoryKeys = locationBL.GetAllProductKeys();
         }
 
         public override void Start()
@@ -44,15 +44,15 @@ namespace StoreUI
         {
             do 
             {
-                Console.WriteLine($"Viewing products for {location.Name} location!");
-                Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
+                Console.WriteLine($"\nViewing products for {location.Name} location.");
+                Console.WriteLine("Enter product number to add to cart, or enter X to go back.");
                 locationBL.WriteInventory();
                 userInput = Console.ReadLine();
                 if (UserInputIsInt() && int.Parse(userInput)<locationBL.GetInventoryCount())
                 {
-                    this.AddItemToCart( inventoryKeys[int.Parse(userInput)] );
+                    this.AddProductToCart( inventoryKeys[int.Parse(userInput)] );
                 }
-                else
+                else if (!UserInputIsX())
                 {
                     Console.WriteLine("Invalid input. Please enter an integer value.");
                 }
@@ -64,9 +64,9 @@ namespace StoreUI
         {
             do
             {
-                Console.WriteLine("Viewing cart.");
+                Console.WriteLine("\nViewing cart.");
                 locationBL.WriteCart();
-                Console.WriteLine("[0] Remove item");
+                Console.WriteLine("[0] Remove product");
                 Console.WriteLine("[1] Empty cart");
                 Console.WriteLine("[2] Checkout order");
                 Console.WriteLine("[X] Return to previous menu");
@@ -75,12 +75,12 @@ namespace StoreUI
             userInput = "";
         }
 
-        private void AddItemToCart(string itemKey)
+        private void AddProductToCart(string productKey)
         {
             do
             {
-                Console.WriteLine($"\nAdding \"{itemKey}\" to cart. Enter X to cancel.");
-                Console.Write($"Enter amount for \"{itemKey}\": ");
+                Console.WriteLine($"\nAdding \"{productKey}\" to cart. Enter X to cancel.");
+                Console.Write($"Enter amount for \"{productKey}\": ");
                 userInput = Console.ReadLine();
                 int amount = 1;
                 if (UserInputIsInt())
@@ -88,11 +88,12 @@ namespace StoreUI
                     amount = int.Parse(userInput);
                     try
                     {
-                        locationBL.AddItemToCart(itemKey, amount);
+                        locationBL.AddProductToCart(productKey, amount);
+                        Console.WriteLine($"Added {amount} of {productKey} to cart.");
                     }
                     catch (ArgumentException e)
                     {
-                        Console.WriteLine($"Failed to add {itemKey} to cart. {e.Message}");
+                        Console.WriteLine($"Failed to add {productKey} to cart. {e.Message}");
                     }
                     break;
                 }

@@ -8,7 +8,7 @@ namespace StoreBL
 {
     public class Shop : IShop
     {
-        public List<ILocation> GetLocations()
+        public List<Location> GetLocations()
         {
             IShopRepo repo = new ShopRepo();
             return repo.GetLocations();

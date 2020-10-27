@@ -5,6 +5,6 @@ namespace StoreBL
 {
     public interface IShop
     {
-         List<ILocation> GetLocations();
+         List<Location> GetLocations();
     }
 }

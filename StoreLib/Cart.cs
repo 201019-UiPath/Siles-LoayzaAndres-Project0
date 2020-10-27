@@ -3,41 +3,41 @@ using System.Collections.Generic;
 
 namespace StoreLib
 {
-    public class Cart : ICart
+    public class Cart
     {
-        Dictionary<string, Item> items;
+        Dictionary<string, Product> products;
         public int Count
         {
             get
             {
-                return items.Count;
+                return products.Count;
             }
         }
 
         public Cart()
         {
-            items = new Dictionary<string, Item>();
+            products = new Dictionary<string, Product>();
         }
 
-        public void AddItem(Item item, int numOfItem)
+        public void AddProduct(Product product, int numOfProduct)
         {
-            //if item is already in cart, add num of item to stock
-            if (items.ContainsKey(item.Name))
+            //if product is already in cart, add num of product to stock
+            if (products.ContainsKey(product.Name))
             {
-                items[item.Name].NumOfStock += numOfItem;
+                products[product.Name].NumOfStock += numOfProduct;
             }
-            //if item is not already in cart, add item
+            //if product is not already in cart, add product
             else
             {
-                item.NumOfStock = numOfItem;
-                items.Add(item.Name, item);
+                product.NumOfStock = numOfProduct;
+                products.Add(product.Name, product);
             }
         }
 
         public void Write()
         {
-            Console.WriteLine($"{Count} items in your cart.");
-            foreach(var pair in items)
+            Console.WriteLine($"{Count} products in your cart.");
+            foreach(var pair in products)
             {
                 pair.Value.Write();
             }

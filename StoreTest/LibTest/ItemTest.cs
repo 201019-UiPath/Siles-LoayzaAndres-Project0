@@ -4,17 +4,17 @@ using Xunit;
 
 namespace StoreTest
 {
-    public class ItemTest
+    public class ProductTest
     {
         [Fact]
-        public void ItemShouldGenerateUniqueId()
+        public void ProductShouldGenerateUniqueId()
         {
             //Arrange & Act
-            Item item = new Item(2.99M, "apple", "This is an apple.", 100);
+            Product product = new Product(2.99M, "apple", "This is an apple.", 100);
 
             //Assert
-            //Console.WriteLine($"Item ID: {item.Id}");
-            Assert.NotNull(item.Id);
+            //Console.WriteLine($"Product ID: {product.Id}");
+            Assert.NotNull(product.Id);
         }
     }
 }

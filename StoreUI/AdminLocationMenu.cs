@@ -6,7 +6,7 @@ namespace StoreUI
 {
     internal class AdminLocationMenu : LocationMenu
     {
-        public AdminLocationMenu(ILocation location) : base(location){}
+        public AdminLocationMenu(Location location) : base(location){}
         
         public override void Start()
         {
@@ -37,13 +37,13 @@ namespace StoreUI
         {
             Console.WriteLine("\nAdding stock to existing product...");
             Console.Write("Enter product name exactly: ");
-            string itemName = Console.ReadLine();
-            if (locationBL.HasItem(itemName))
+            string productName = Console.ReadLine();
+            if (locationBL.HasProduct(productName))
             {
-                Console.WriteLine($"\nAdding stock to {itemName}...");
+                Console.WriteLine($"\nAdding stock to {productName}...");
                 Console.Write("Enter amount of stock being added: ");
                 int stockAdded = int.Parse(Console.ReadLine());
-                locationBL.AddStock(itemName, stockAdded);
+                locationBL.AddStock(productName, stockAdded);
             }
             else 
             {
@@ -57,25 +57,25 @@ namespace StoreUI
         {
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product name: ");
-            string itemName = Console.ReadLine();
+            string productName = Console.ReadLine();
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product description: ");
-            string itemDescript = Console.ReadLine();
+            string productDescript = Console.ReadLine();
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product price: $");
-            decimal itemPrice = decimal.Parse(Console.ReadLine());
+            decimal productPrice = decimal.Parse(Console.ReadLine());
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter initial number of stock: ");
             int numOfStock = int.Parse(Console.ReadLine());
 
-            Item newItem = new Item(itemPrice, itemName, itemDescript, numOfStock);
+            Product newProduct = new Product(productPrice, productName, productDescript, numOfStock);
 
             Console.WriteLine("\nConfirm new product (Y/N)?");
-            newItem.Write();
+            newProduct.Write();
             string confirm = Console.ReadLine();
             if (Regex.IsMatch(confirm, "y|Y"))
             {
-                locationBL.AddItemToInventory(newItem);
+                locationBL.AddProductToInventory(newProduct);
                 Console.WriteLine("New product added!");
             }
             else

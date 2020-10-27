@@ -4,7 +4,7 @@ namespace StoreLib
     /// Represents a store location, including address, inventory, and order
     /// history.
     /// </summary>
-    public class Location : ILocation
+    public class Location
     {
         /// <summary>
         /// Name of location used in UI

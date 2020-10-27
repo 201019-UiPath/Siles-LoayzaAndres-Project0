@@ -11,7 +11,7 @@ namespace StoreUI
     internal class ShopMenu : Menu
     {
         protected IShop shop;
-        protected List<ILocation> locations;
+        protected List<Location> locations;
 
         /// <summary>
         /// Runs the menu in console
@@ -68,7 +68,7 @@ namespace StoreUI
         /// </summary>
         /// <param name="location"></param>
         /// <returns>index of the given location as a string</returns>
-        protected string locationIndex(ILocation location)
+        protected string locationIndex(Location location)
         {
             return locations.IndexOf(location).ToString();
         }

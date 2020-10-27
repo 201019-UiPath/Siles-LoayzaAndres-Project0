@@ -5,10 +5,10 @@ namespace StoreLib
     /// <summary>
     /// Represents an individual product
     /// </summary>
-    public class Item
+    public class Product
     {
         /// <summary>
-        /// ID number for this Item
+        /// ID number for this Product
         /// </summary>
         private int id;
         public int Id
@@ -22,7 +22,7 @@ namespace StoreLib
         }
 
         /// <summary>
-        /// Price in USD for this item
+        /// Price in USD for this product
         /// </summary>
         private decimal price;
         public decimal Price
@@ -73,7 +73,7 @@ namespace StoreLib
         }
 
 
-        public Item(decimal price, string name, string description, int numOfStock) 
+        public Product(decimal price, string name, string description, int numOfStock) 
         {
             this.id = this.GetHashCode();
             this.price = decimal.Round(price, 2);

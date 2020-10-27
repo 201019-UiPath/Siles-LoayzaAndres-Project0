@@ -7,15 +7,15 @@ namespace StoreBL
     {
         int GetInventoryCount();
 
-        string[] GetAllItemKeys();
+        string[] GetAllProductKeys();
 
-        void AddItemToInventory(Item item);
+        void AddProductToInventory(Product product);
 
         void WriteInventory();
 
-        bool HasItem (string name);
+        bool HasProduct (string name);
 
-        void AddItemToCart(string key, int amount);
+        void AddProductToCart(string key, int amount);
 
         void WriteCart();
 

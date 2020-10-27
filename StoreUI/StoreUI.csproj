@@ -1,8 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <ItemGroup>
-    <ProjectReference Include="..\StoreBL\StoreBL.csproj" />
     <ProjectReference Include="..\StoreLib\StoreLib.csproj" />
+    <ProjectReference Include="..\StoreBL\StoreBL.csproj" />
   </ItemGroup>
 
   <PropertyGroup>
