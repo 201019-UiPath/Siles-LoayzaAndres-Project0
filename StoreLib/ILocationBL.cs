@@ -1,7 +1,7 @@
-using StoreLib;
+using StoreDB;
 using System.Collections.Generic;
 
-namespace StoreBL
+namespace StoreLib
 {
     public interface ILocationBL
     {

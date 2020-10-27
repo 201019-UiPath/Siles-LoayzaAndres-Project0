@@ -1,15 +1,13 @@
 using System;
 using System.Collections.Generic;
-using StoreLib;
 using StoreDB;
 
-namespace StoreBL
+namespace StoreLib
 {
     public class LocationBL : ILocationBL
     {
         private Location location;
         private Dictionary<string, Product> inventory;
-        private HashSet<Product> products;
         private Cart cart;
 
         public LocationBL(Location location)

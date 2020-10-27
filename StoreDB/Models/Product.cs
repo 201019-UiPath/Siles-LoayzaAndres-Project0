@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StoreLib
+namespace StoreDB
 {
     /// <summary>
     /// Represents an individual product

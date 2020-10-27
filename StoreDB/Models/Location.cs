@@ -1,4 +1,4 @@
-namespace StoreLib
+namespace StoreDB
 {
     /// <summary>
     /// Represents a store location, including address, inventory, and order

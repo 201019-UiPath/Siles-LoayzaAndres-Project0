@@ -1,4 +1,4 @@
-namespace StoreLib
+namespace StoreDB
 {
     public class Order
     {

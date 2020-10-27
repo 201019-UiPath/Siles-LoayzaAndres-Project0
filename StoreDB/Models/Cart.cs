@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace StoreLib
+namespace StoreDB
 {
     public class Cart
     {

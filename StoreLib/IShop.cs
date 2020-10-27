@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using StoreLib;
+using StoreDB;
 
-namespace StoreBL
+namespace StoreLib
 {
     public interface IShop
     {
