@@ -5,7 +5,7 @@ namespace StoreDB
 {
     public class Cart
     {
-        Dictionary<string, Product> products;
+        List<Stock> products;
         public int Count
         {
             get
@@ -16,30 +16,29 @@ namespace StoreDB
 
         public Cart()
         {
-            products = new Dictionary<string, Product>();
+            products = new List<Stock>();
         }
 
+        /*
         public void AddProduct(Product product, int numOfProduct)
         {
             //if product is already in cart, add num of product to stock
-            if (products.ContainsKey(product.Name))
+            if (!location.HasProduct(stock.Product))
             {
-                products[product.Name].NumOfStock += numOfProduct;
+                location.Inventory.Add(stock);
             }
-            //if product is not already in cart, add product
-            else
-            {
-                product.NumOfStock = numOfProduct;
-                products.Add(product.Name, product);
+            else {
+                System.Console.WriteLine("Error! Product already exists!");
             }
         }
+        */
 
         public void Write()
         {
             Console.WriteLine($"{Count} products in your cart.");
-            foreach(var pair in products)
+            foreach(var stock in products)
             {
-                pair.Value.Write();
+                stock.Write();
             }
         }
     }

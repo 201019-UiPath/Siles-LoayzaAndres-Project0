@@ -1,11 +1,9 @@
-﻿using System;
-using StoreDB;
+﻿using StoreDB;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace StoreLib
 {
-    public class Shop : IShop
+    public class Shop
     {
         public List<Location> GetLocations()
         {

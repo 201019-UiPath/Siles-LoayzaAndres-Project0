@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace StoreDB
 {
     /// <summary>
@@ -6,34 +8,32 @@ namespace StoreDB
     /// </summary>
     public class Location
     {
+        public int Id {get; private set;}
+
         /// <summary>
         /// Name of location used in UI
         /// </summary>
-        private string name;
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name {get; private set;}
 
         /// <summary>
         /// Address for this store's location.
         /// </summary>
-        private Address locAddress;
-        public Address LocAddress
-        {
-            get
-            {
-                return locAddress;
-            }
-        }
+        public Address Address {get; private set;}
+
+        /// <summary>
+        /// List of all available products at this store
+        /// </summary>
+        /// <value></value>
+        public List<Stock> Inventory {get; set;}
+
+        public List<Order> Orders {get; set;}
 
         public Location(string name, Address address)
         {
-            this.name = name;
-            this.locAddress = address;
+            this.Name = name;
+            this.Address = address;
+            this.Inventory = new List<Stock>();
+            this.Orders = new List<Order>();
         }
 
     }

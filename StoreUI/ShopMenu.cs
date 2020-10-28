@@ -10,7 +10,7 @@ namespace StoreUI
     /// </summary>
     internal class ShopMenu : Menu
     {
-        protected IShop shop;
+        protected Shop shop;
         protected List<Location> locations;
 
         /// <summary>

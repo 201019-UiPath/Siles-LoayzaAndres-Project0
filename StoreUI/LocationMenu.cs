@@ -9,14 +9,14 @@ namespace StoreUI
     internal class LocationMenu : Menu
     {
         protected Location location;
-        protected ILocationBL locationBL;
-        protected string[] inventoryKeys;
+        protected LocationService locationService;
+        protected CartService cartService;
 
         public LocationMenu(Location location)
         {
             this.location = location;
-            this.locationBL = new LocationBL(location);
-            this.inventoryKeys = locationBL.GetAllProductKeys();
+            this.locationService = new LocationService(location);
+            this.cartService = new CartService();
         }
 
         public override void Start()
@@ -46,11 +46,13 @@ namespace StoreUI
             {
                 Console.WriteLine($"\nViewing products for {location.Name} location.");
                 Console.WriteLine("Enter product number to add to cart, or enter X to go back.");
-                locationBL.WriteInventory();
+                locationService.WriteInventory();
                 userInput = Console.ReadLine();
-                if (UserInputIsInt() && int.Parse(userInput)<locationBL.GetInventoryCount())
+                if (UserInputIsInt())
                 {
-                    this.AddProductToCart( inventoryKeys[int.Parse(userInput)] );
+                    int index = int.Parse(userInput);
+                    Product product = locationService.GetProductByIndex(index);
+                    AddProductToCart(product);
                 }
                 else if (!UserInputIsX())
                 {
@@ -65,7 +67,7 @@ namespace StoreUI
             do
             {
                 Console.WriteLine("\nViewing cart.");
-                locationBL.WriteCart();
+                cartService.WriteCart();
                 Console.WriteLine("[0] Remove product");
                 Console.WriteLine("[1] Empty cart");
                 Console.WriteLine("[2] Checkout order");
@@ -75,25 +77,25 @@ namespace StoreUI
             userInput = "";
         }
 
-        private void AddProductToCart(string productKey)
+        private void AddProductToCart(Product product)
         {
             do
             {
-                Console.WriteLine($"\nAdding \"{productKey}\" to cart. Enter X to cancel.");
-                Console.Write($"Enter amount for \"{productKey}\": ");
+                Console.WriteLine($"\nAdding \"{product.Name}\" to cart. Enter X to cancel.");
+                Console.Write($"Enter quantity for \"{product.Name}\": ");
                 userInput = Console.ReadLine();
-                int amount = 1;
+                int quantity = 1;
                 if (UserInputIsInt())
                 {
-                    amount = int.Parse(userInput);
+                    quantity = int.Parse(userInput);
                     try
                     {
-                        locationBL.AddProductToCart(productKey, amount);
-                        Console.WriteLine($"Added {amount} of {productKey} to cart.");
+                        cartService.AddToCart(new Stock(product, quantity));
+                        Console.WriteLine($"Added {quantity} of {product.Name} to cart.");
                     }
-                    catch (ArgumentException e)
+                    catch (Exception e)
                     {
-                        Console.WriteLine($"Failed to add {productKey} to cart. {e.Message}");
+                        Console.WriteLine($"Failed to add {product.Name} to cart. {e.Message}");
                     }
                     break;
                 }

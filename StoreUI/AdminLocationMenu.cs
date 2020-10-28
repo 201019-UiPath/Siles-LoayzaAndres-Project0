@@ -1,6 +1,5 @@
 using System;
 using StoreDB;
-using StoreLib;
 using System.Text.RegularExpressions;
 
 namespace StoreUI
@@ -22,7 +21,7 @@ namespace StoreUI
                 switch(userInput)
                 {
                     case "0":
-                        locationBL.WriteInventory();
+                        locationService.WriteInventory();
                         break;
                     case "1":
                         AddStock();
@@ -36,21 +35,34 @@ namespace StoreUI
 
         protected void AddStock()
         {
-            Console.WriteLine("\nAdding stock to existing product...");
-            Console.Write("Enter product name exactly: ");
-            string productName = Console.ReadLine();
-            if (locationBL.HasProduct(productName))
+            locationService.WriteInventory();
+            do 
             {
-                Console.WriteLine($"\nAdding stock to {productName}...");
-                Console.Write("Enter amount of stock being added: ");
-                int stockAdded = int.Parse(Console.ReadLine());
-                locationBL.AddStock(productName, stockAdded);
-            }
-            else 
-            {
-                Console.WriteLine("Product not found. Press any key to go back.");
-                Console.Read();
-            }
+                Console.WriteLine("\nSelect a product to add stock. Enter X to go back.");
+                userInput = Console.ReadLine();
+                Product product;
+                if(UserInputIsInt())
+                {
+                    try
+                    {
+                        int productIndex = int.Parse(userInput);
+                        product = locationService.GetProductByIndex(productIndex);
+                        Console.WriteLine($"\nAdding stock to {product.Name}.");
+                        Console.Write("Enter amount of stock being added: ");
+                        int quantityAdded = int.Parse(Console.ReadLine());
+                        locationService.AddToStock(productIndex, quantityAdded);
+                    }
+                    catch (Exception e)
+                    {
+                        Console.WriteLine(e.Message);
+                        Console.WriteLine("Failed to add stock.");
+                    }
+                }
+                else 
+                {
+                    Console.WriteLine("Invalid input. Please enter an integer.");
+                }
+            } while (!UserInputIsX());
             userInput = "";
         }
 
@@ -66,17 +78,17 @@ namespace StoreUI
             Console.Write("Enter product price: $");
             decimal productPrice = decimal.Parse(Console.ReadLine());
             Console.WriteLine("\nAdding new product...");
-            Console.Write("Enter initial number of stock: ");
-            int numOfStock = int.Parse(Console.ReadLine());
+            Console.Write("Enter initial quantity: ");
+            int quantity = int.Parse(Console.ReadLine());
 
-            Product newProduct = new Product(productPrice, productName, productDescript, numOfStock);
+            Stock newStock = new Stock(new Product(productPrice, productName, productDescript), quantity);
 
             Console.WriteLine("\nConfirm new product (Y/N)?");
-            newProduct.Write();
+            newStock.Write();
             string confirm = Console.ReadLine();
             if (Regex.IsMatch(confirm, "y|Y"))
             {
-                locationBL.AddProductToInventory(newProduct);
+                locationService.AddNewProductToInventory(newStock);
                 Console.WriteLine("New product added!");
             }
             else

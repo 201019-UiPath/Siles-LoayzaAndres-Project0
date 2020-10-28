@@ -10,89 +10,58 @@ namespace StoreDB
         /// <summary>
         /// ID number for this Product
         /// </summary>
-        private int id;
-        public int Id
-        {
-            get {
-                return id;
-            }
-            set {
-                id = value;
-            }
-        }
+        public int Id {get; private set;}
 
         /// <summary>
         /// Price in USD for this product
         /// </summary>
         private decimal price;
-        public decimal Price
-        {
-            get {
-                return price;
-            }
-            set {
-                price = value;
-            }
-        }
+        public decimal Price { get{return price;} set{price=decimal.Round(value, 2);} }
 
         /// <summary>
         /// Short descriptive name for product
         /// </summary>
-        private string name;
-        public string Name 
-        {
-            get
-            {
-                return name;
-            }
-        }
+        public string Name {get; private set;}
 
         /// <summary>
         /// Description for product
         /// </summary>
-        private string description;
-        public string Description
+        public string Description {get; private set;}
+
+
+        public Product(decimal price, string name, string description) 
         {
-            get
-            {
-                return description;
-            }
+            this.Price = price;
+            this.Name = name;
+            this.Description = description;
         }
 
-        private int numOfStock;
-        public int NumOfStock
+        // override object.Equals
+        public override bool Equals(object obj)
         {
-            get
+            if (obj == null || GetType() != obj.GetType())
             {
-                return numOfStock;
+                return false;
             }
-            set
+            else if ( Name != ((Product)obj).Name )
             {
-                numOfStock = value;
+                return false;
             }
+
+            return true;
         }
-
-
-        public Product(decimal price, string name, string description, int numOfStock) 
+        
+        // override object.GetHashCode
+        public override int GetHashCode()
         {
-            this.id = this.GetHashCode();
-            this.price = decimal.Round(price, 2);
-            this.name = name;
-            this.description = description;
-            this.numOfStock = numOfStock;
-        }
-
-        public void AddStock(int add)
-        {
-            this.numOfStock += add;
+            return Name.GetHashCode();
         }
 
         public void Write()
         {
-            Console.WriteLine($"{this.name}");
+            Console.WriteLine($"{this.Name}");
             Console.WriteLine($"    Price: ${this.Price}");
             Console.WriteLine($"    Description: {this.Description}");
-            Console.WriteLine($"    In Stock: {this.NumOfStock}");
         }
 
     }
