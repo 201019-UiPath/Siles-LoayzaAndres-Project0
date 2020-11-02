@@ -15,9 +15,10 @@ namespace StoreLib
             this.customerRepo = (ICustomerRepo)repo;
         }
 
-        public void AddToCart(Stock stock)
+        public void AddToCart(CartItem item)
         {
-            repo.AddToCart(stock);
+            item.CartId = repo.GetCart().Result.Id;
+            repo.AddCartItem(item);
         }
 
         public void RemoveFromCart(int index)
@@ -32,27 +33,36 @@ namespace StoreLib
 
         public void QuickWriteCart()
         {
-            repo.GetCart().QuickWrite();
+            repo.GetCart().Result.QuickWrite();
         }
 
         public void WriteCart()
         {
-            repo.GetCart().Write();
+            repo.GetCart().Result.Write();
         }
 
         public Order PlaceOrder()
         {
             Location loc = repo.GetLocation();
             Customer custom = customerRepo.GetCustomer();
-            Cart cart = repo.GetCart();
-            Order order = new Order(loc.Id, custom.Id, loc.Address, custom.Address, cart.Products, cart.Cost);
-            foreach(Stock stock in cart.Products)
+            Cart cart = repo.GetCart().Result;
+            Order order = new Order();
+            order.LocationId = loc.Id;
+            order.CustomerId = custom.Id;
+            order.LocationAddress = loc.Address;
+            order.CustomerAddress = custom.Address;
+            order.Items = new List<OrderItem>();
+            foreach(CartItem c in cart.Items)
             {
-                repo.RemoveInventory(stock);
+                OrderItem o = new OrderItem();
+                o.Product = c.Product;
+                o.Quantity = c.Quantity;
+                order.Items.Add(o);
             }
-            repo.EmptyCart();
-            repo.AddOrderToLocation(order);
-            customerRepo.AddOrderToCustomer(order);
+            order.Cost = cart.Cost;
+
+            repo.PlaceOrder(order);
+            
             return order;
         }
     }

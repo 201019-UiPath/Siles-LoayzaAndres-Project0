@@ -10,7 +10,7 @@ namespace StoreUI
 
         public MainMenu()
         {
-            this.repo = new FalseRepo();
+            this.repo = new DBRepo(new StoreContext());
         }
 
         public override void Start()
@@ -38,7 +38,7 @@ namespace StoreUI
 
         private void StartCustomerMenu()
         {
-            subMenu = new ShopMenu(repo.SetCurrentCustomer(0));
+            subMenu = new ShopMenu(repo.SetCurrentCustomer(1));
             subMenu.Start();
         }
 

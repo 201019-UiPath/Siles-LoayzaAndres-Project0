@@ -1,15 +1,11 @@
 namespace StoreDB.Models
 {
-    public class Stock
+    public abstract class Item
     {
-        public Product Product {get; private set;}
+        public int ProductId {get; set;}
+        public Product Product {get; set;}
         public int Quantity {get; set;}
-        public Stock(Product product, int quantity)
-        {
-            Product = product;
-            Quantity = quantity;
-        }
-
+        
         public void Write()
         {
             Product.Write();

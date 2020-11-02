@@ -8,36 +8,27 @@ namespace StoreDB.Models
     /// </summary>
     public class Location
     {
-        public int Id {get; private set;}
+        public int Id {get; set;}
 
         /// <summary>
         /// Name of location used in UI
         /// </summary>
-        public string Name {get; private set;}
+        public string Name {get; set;}
 
         /// <summary>
         /// Address for this store's location.
         /// </summary>
-        public Address Address {get; private set;}
+        public Address Address {get; set;}
 
         /// <summary>
         /// List of all available products at this store
         /// </summary>
         /// <value></value>
-        public List<Stock> Inventory {get; set;}
+        public List<InvItem> Inventory {get; set;}
 
         public List<Order> Orders {get; set;}
 
-        public Dictionary<int, Cart> Carts {get; set;}
-
-        public Location(int id, string name, Address address)
-        {
-            this.Name = name;
-            this.Address = address;
-            this.Inventory = new List<Stock>();
-            this.Orders = new List<Order>();
-            this.Carts = new Dictionary<int, Cart>();
-        }
+        //public Dictionary<int, Cart> Carts {get; set;}
 
     }
 }

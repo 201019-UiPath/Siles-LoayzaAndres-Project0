@@ -28,11 +28,11 @@ namespace StoreLib
             return repo.GetLocation().Name;
         }
 
-        public void AddNewProductToInventory(Stock stock)
+        public void AddNewProductToInventory(InvItem invItem)
         {
-            if (!HasProduct(stock.Product))
+            if (!HasProduct(invItem.Product))
             {
-                repo.AddNewProduct(stock);
+                repo.AddNewProduct(invItem);
             }
             else {
                 System.Console.WriteLine("Error! Product already exists!");
@@ -41,12 +41,12 @@ namespace StoreLib
 
         public void WriteInventory()
         {
-            List<Stock> inventory = repo.GetInventory();
+            List<InvItem> inventory = repo.GetInventory().Result;
             int i=0;
-            foreach(var stock in inventory)
+            foreach(var item in inventory)
             {
                 Console.Write($"[{i}] ");
-                stock.Write();
+                item.Write();
                 i++;
             }
         }
@@ -54,16 +54,16 @@ namespace StoreLib
         /// <summary>
         /// Returns true if the given Product exists already in this Location's
         /// Inventory. Iterates through Inventory and compares the Product in
-        /// each Stock with the given Product using the Equals method.
+        /// each InvItem with the given Product using the Equals method.
         /// </summary>
         /// <param name="product"></param>
         /// <returns>true if given Product is in this Inventory</returns>
         public bool HasProduct(Product product)
         {
-            List<Stock> inventory = repo.GetInventory();
-            foreach(var stock in inventory)
+            List<InvItem> inventory = repo.GetInventory().Result;
+            foreach(var invItem in inventory)
             {
-                if(stock.Product.Equals(product))
+                if(invItem.Product.Equals(product))
                 {
                     return true;
                 }
@@ -73,12 +73,12 @@ namespace StoreLib
 
         public Product GetProductByIndex(int index)
         {
-            return repo.GetInventory()[index].Product;
+            return repo.GetInventory().Result[index].Product;
         }
 
-        public void AddToStock(int index, int quantityAdded)
+        public void AddToInvItem(int index, int quantityAdded)
         {
-            if (index<repo.GetInventory().Count)
+            if (index<repo.GetInventory().Result.Count)
             {
                 repo.AddToProductQuantity(index, quantityAdded);
             }

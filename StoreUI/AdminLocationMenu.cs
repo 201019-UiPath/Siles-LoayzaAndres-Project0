@@ -15,7 +15,7 @@ namespace StoreUI
             {
                 Console.WriteLine($"\nWelcome to our {locationService.GetName()} location, admin!");
                 Console.WriteLine("[0] View inventory");
-                Console.WriteLine("[1] Add stock");
+                Console.WriteLine("[1] Add invItem");
                 Console.WriteLine("[2] Add new product");
                 Console.WriteLine("[X] Back to location select");
                 userInput = Console.ReadLine();
@@ -25,7 +25,7 @@ namespace StoreUI
                         locationService.WriteInventory();
                         break;
                     case "1":
-                        AddStock();
+                        AddInvItem();
                         break;
                     case "2":
                         AddNewProduct();
@@ -34,12 +34,12 @@ namespace StoreUI
             } while (!UserInputIsX());
         }
 
-        protected void AddStock()
+        protected void AddInvItem()
         {
             locationService.WriteInventory();
             do 
             {
-                Console.WriteLine("\nSelect a product to add stock. Enter X to go back.");
+                Console.WriteLine("\nSelect a product to add invItem. Enter X to go back.");
                 userInput = Console.ReadLine();
                 Product product;
                 if(UserInputIsInt())
@@ -48,15 +48,15 @@ namespace StoreUI
                     {
                         int productIndex = int.Parse(userInput);
                         product = locationService.GetProductByIndex(productIndex);
-                        Console.WriteLine($"\nAdding stock to {product.Name}.");
-                        Console.Write("Enter amount of stock being added: ");
+                        Console.WriteLine($"\nAdding invItem to {product.Name}.");
+                        Console.Write("Enter amount of invItem being added: ");
                         int quantityAdded = int.Parse(Console.ReadLine());
-                        locationService.AddToStock(productIndex, quantityAdded);
+                        locationService.AddToInvItem(productIndex, quantityAdded);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
-                        Console.WriteLine("Failed to add stock.");
+                        Console.WriteLine("Failed to add invItem.");
                     }
                 }
                 else 
@@ -69,27 +69,28 @@ namespace StoreUI
 
         protected void AddNewProduct()
         {
+            Product product = new Product();
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product name: ");
-            string productName = Console.ReadLine();
+            product.Name = Console.ReadLine();
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product description: ");
-            string productDescript = Console.ReadLine();
+            product.Description = Console.ReadLine();
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter product price: $");
-            decimal productPrice = decimal.Parse(Console.ReadLine());
+            product.Price = decimal.Parse(Console.ReadLine());
             Console.WriteLine("\nAdding new product...");
             Console.Write("Enter initial quantity: ");
             int quantity = int.Parse(Console.ReadLine());
 
-            Stock newStock = new Stock(new Product(productPrice, productName, productDescript), quantity);
+            InvItem newInvItem = new InvItem(product, quantity);
 
             Console.WriteLine("\nConfirm new product (Y/N)?");
-            newStock.Write();
+            newInvItem.Write();
             string confirm = Console.ReadLine();
             if (Regex.IsMatch(confirm, "y|Y"))
             {
-                locationService.AddNewProductToInventory(newStock);
+                locationService.AddNewProductToInventory(newInvItem);
                 Console.WriteLine("New product added!");
             }
             else

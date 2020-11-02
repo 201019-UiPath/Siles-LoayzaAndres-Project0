@@ -21,20 +21,12 @@ namespace StoreDB.Models
         /// <summary>
         /// Short descriptive name for product
         /// </summary>
-        public string Name {get; private set;}
+        public string Name {get; set;}
 
         /// <summary>
         /// Description for product
         /// </summary>
-        public string Description {get; private set;}
-
-
-        public Product(decimal price, string name, string description) 
-        {
-            this.Price = price;
-            this.Name = name;
-            this.Description = description;
-        }
+        public string Description {get; set;}
 
         // override object.Equals
         public override bool Equals(object obj)

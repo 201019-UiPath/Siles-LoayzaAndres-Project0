@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using StoreDB.Models;
 
 namespace StoreDB
@@ -7,14 +8,15 @@ namespace StoreDB
     public interface ILocationRepo
     {
         Location GetLocation();
-        List<Stock> GetInventory();
-        void AddToCart(Stock stock);
+        Task<List<InvItem>> GetInventory();
+        void AddCartItem(CartItem item);
         void RemoveFromCart(int index);
         void EmptyCart();
-        Cart GetCart();
-        void RemoveInventory(Stock stock);
+        Task<Cart> GetCart();
+        void RemoveInventory(InvItem invItem);
         void AddOrderToLocation(Order order);
-        void AddNewProduct(Stock stock);
+        void AddNewProduct(InvItem invItem);
         void AddToProductQuantity(int index, int quantityAdded);
+        void PlaceOrder(Order order);
     }
 }

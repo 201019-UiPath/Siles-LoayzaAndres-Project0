@@ -13,14 +13,21 @@ namespace StoreLib
             this.repo = repo;
         }
 
-        public List<Location> GetLocations()
+        public void AddLocation(Location location)
         {
-            return repo.GetLocations();
+            repo.AddLocation(location);
         }
 
+        public List<Location> GetLocations()
+        {
+            return repo.GetLocations().Result;
+        }
+
+        /*
         public bool HasLocation(int index)
         {
             return repo.HasLocation(index);
         }
+        */
     }
 }

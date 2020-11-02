@@ -13,21 +13,24 @@ namespace StoreUI
             do
             {
                 Console.WriteLine("\nViewing cart.");
-                cartService.QuickWriteCart();
-                Console.WriteLine("[0] Remove product");
-                Console.WriteLine("[1] Empty cart");
-                Console.WriteLine("[2] Checkout order");
+                Console.WriteLine("[0] View products in cart");
+                Console.WriteLine("[1] Remove product");
+                Console.WriteLine("[2] Empty cart");
+                Console.WriteLine("[3] Checkout order");
                 Console.WriteLine("[X] Return to previous menu");
                 userInput = Console.ReadLine();
                 switch (userInput)
                 {
                     case "0":
-                        RemoveProduct();
+                        cartService.WriteCart();
                         break;
                     case "1":
-                        EmptyCart();
+                        RemoveProduct();
                         break;
                     case "2":
+                        EmptyCart();
+                        break;
+                    case "3":
                         Checkout();
                         break;
                 }
@@ -37,7 +40,7 @@ namespace StoreUI
         private void RemoveProduct()
         {
             Console.Write("Enter product number to remove, or X to go back: ");
-            cartService.WriteCart();
+            //cartService.WriteCart();
             userInput = Console.ReadLine();
             if (!UserInputIsX() && UserInputIsInt())
             {
@@ -72,7 +75,15 @@ namespace StoreUI
         private void Checkout()
         {
             Console.WriteLine("Starting checkout. Enter X to cancel any time.");
-            Order order = cartService.PlaceOrder();
+            try
+            {
+                Order order = cartService.PlaceOrder();
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Failed to checkout cart. {e.Message}");
+            }
+            
         }
     }
 }

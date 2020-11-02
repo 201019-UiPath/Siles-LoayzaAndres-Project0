@@ -5,41 +5,33 @@ namespace StoreDB.Models
 {
     public class Cart
     {
-        public List<Stock> Products {get; set;}
+        public int Id {get; set;}
+        public int LocationId {get; set;}
+        public int CustomerId {get; set;}
+        public List<CartItem> Items {get; set;}
 
-        public int Count
-        {
-            get
-            {
-                return Products.Count;
-            }
-        }
+        public int Count { get{return Items.Count;} }
 
         public decimal Cost
         {
             get
             {
                 decimal total = 0;
-                foreach(var stock in Products)
+                foreach(var invItem in Items)
                 {
-                    total += (stock.Quantity * stock.Product.Price);
+                    total += (invItem.Quantity * invItem.Product.Price);
                 }
                 return total;
             }
         }
 
-        public Cart()
-        {
-            Products = new List<Stock>();
-        }
-
         public void QuickWrite()
         {
             Console.WriteLine($"{Count} products in your cart.");
-            foreach(var stock in Products)
+            foreach(var invItem in Items)
             {
-                Console.WriteLine($"{stock.Product.Name}");
-                Console.WriteLine($"    Quantity: {stock.Quantity}");
+                Console.WriteLine($"{invItem.Product.Name}");
+                Console.WriteLine($"    Quantity: {invItem.Quantity}");
             }
             Console.WriteLine($"Subtotal: ${Cost}");
         }
@@ -48,10 +40,10 @@ namespace StoreDB.Models
         {
             Console.WriteLine($"{Count} products in your cart.");
             int i = 0;
-            foreach(var stock in Products)
+            foreach(var item in Items)
             {
                 Console.Write($"[{i}] ");
-                stock.Write();
+                item.Write();
                 i++;
             }
             Console.WriteLine($"Subtotal: ${Cost}");

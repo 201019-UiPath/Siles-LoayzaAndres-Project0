@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Text.RegularExpressions;
 using StoreDB;
 using StoreDB.Models;
 using StoreLib;
@@ -10,6 +11,7 @@ namespace StoreUI
     {
         protected IShopRepo repo;
         protected ShopService shopService;
+        private List<Location> locations;
 
         public AdminShopMenu(IShopRepo repo)
         {
@@ -23,24 +25,16 @@ namespace StoreUI
             {
                 Console.WriteLine("\nWelcome to the admin store selection!");
                 Console.WriteLine("Please select a store location.");
-                writeLocations();
+                locations = shopService.GetLocations();
+                foreach (Location loc in locations)
+                {
+                    Console.WriteLine($"[{locations.IndexOf(loc)}] {loc.Name}");
+                }
+                Console.WriteLine("[A] Add a location");
                 Console.WriteLine("[X] Back to Main Menu");
                 readInput();
             } while (!UserInputIsX());
         } 
-
-        /// <summary>
-        /// Outputs the list of locations into the console, each preceded by 
-        /// its index.
-        /// </summary>
-        protected void writeLocations()
-        {
-            List<Location> locations = shopService.GetLocations();
-            foreach (Location loc in locations)
-            {
-                Console.WriteLine($"[{locations.IndexOf(loc)}] {loc.Name}");
-            }
-        }
 
         protected void readInput()
         {
@@ -48,12 +42,31 @@ namespace StoreUI
             if (UserInputIsInt())
             {
                 int index = int.Parse(userInput);
-                if (shopService.HasLocation(index))
+                if (index<locations.Count)
                 {
-                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(index));
+                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(locations[index]));
                     subMenu.Start();
                 }
                 
+            }
+            else if (Regex.IsMatch(userInput, "^a|A$"))
+            {
+                Location newLoc = new Location();
+                newLoc.Address = new Address();
+                Console.Write("Enter location name: ");
+                newLoc.Name = Console.ReadLine();
+                Console.Write("Enter street address: ");
+                newLoc.Address.Street = Console.ReadLine();
+                Console.Write("Enter city: ");
+                newLoc.Address.City = Console.ReadLine();
+                Console.Write("Enter state: ");
+                newLoc.Address.State = Console.ReadLine();
+                Console.Write("Enter zip: ");
+                newLoc.Address.Zip = int.Parse(Console.ReadLine());
+                Console.Write("Enter country: ");
+                newLoc.Address.Country = Console.ReadLine();
+                this.shopService.AddLocation(newLoc);
+                Console.WriteLine($"New location {newLoc.Name} added!");
             }
             else
             {
