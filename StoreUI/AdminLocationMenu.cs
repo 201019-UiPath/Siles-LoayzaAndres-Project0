@@ -15,7 +15,7 @@ namespace StoreUI
             {
                 Console.WriteLine($"\nWelcome to our {locationService.GetName()} location, admin!");
                 Console.WriteLine("[0] View inventory");
-                Console.WriteLine("[1] Add invItem");
+                Console.WriteLine("[1] Add quantity");
                 Console.WriteLine("[2] Add new product");
                 Console.WriteLine("[X] Back to location select");
                 userInput = Console.ReadLine();
@@ -39,7 +39,7 @@ namespace StoreUI
             locationService.WriteInventory();
             do 
             {
-                Console.WriteLine("\nSelect a product to add invItem. Enter X to go back.");
+                Console.WriteLine("\nSelect a product to add quantity. Enter X to go back.");
                 userInput = Console.ReadLine();
                 Product product;
                 if(UserInputIsInt())
@@ -48,15 +48,15 @@ namespace StoreUI
                     {
                         int productIndex = int.Parse(userInput);
                         product = locationService.GetProductByIndex(productIndex);
-                        Console.WriteLine($"\nAdding invItem to {product.Name}.");
-                        Console.Write("Enter amount of invItem being added: ");
+                        Console.WriteLine($"\nAdding quantity to {product.Name}.");
+                        Console.Write("Enter quantity being added: ");
                         int quantityAdded = int.Parse(Console.ReadLine());
                         locationService.AddToInvItem(productIndex, quantityAdded);
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
-                        Console.WriteLine("Failed to add invItem.");
+                        Console.WriteLine("Failed to add quantity.");
                     }
                 }
                 else 

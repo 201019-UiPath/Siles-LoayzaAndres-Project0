@@ -20,14 +20,15 @@ namespace StoreDB
         public void AddLocation(Location location)
         {
             context.StoreLocations.AddAsync(location);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public void AddNewProduct(InvItem invItem)
         {
             Location loc = context.StoreLocations.Single(x => x.Id == currentLocation.Id);
+            loc.Inventory = new List<InvItem>();
             loc.Inventory.Add(invItem);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public void AddOrderToCustomer(Order order)
@@ -35,7 +36,7 @@ namespace StoreDB
             context.Customers.Include("Orders")
                              .Single(x => x.Id == currentCustomer.Id).Orders
                              .Add(order);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public void AddOrderToLocation(Order order)
@@ -43,19 +44,19 @@ namespace StoreDB
             context.StoreLocations.Include("Orders")
                                   .Single(x => x.Id == currentLocation.Id).Orders
                                   .Add(order);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public void AddCartItem(CartItem cartItem)
         {
             context.CartItems.AddAsync(cartItem);
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public void AddToProductQuantity(int index, int quantityAdded)
         {
             GetInventory().Result[index].Quantity += quantityAdded;
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         private void CreateCartIfItDoesNotExist()
@@ -67,14 +68,14 @@ namespace StoreDB
                 cart.CustomerId = currentCustomer.Id;
                 cart.Items = new List<CartItem>();
                 context.Carts.Add(cart);
-                context.SaveChangesAsync();
+                context.SaveChanges();
             }
         }
 
         public void EmptyCart()
         {
             GetCart().Result.Items.Clear();
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public Task<Cart> GetCart()
@@ -116,13 +117,13 @@ namespace StoreDB
                 {
                     throw new System.NotImplementedException();
                 }
-                context.SaveChangesAsync();
+                context.SaveChanges();
                 EmptyCart();
-                context.SaveChangesAsync();
+                context.SaveChanges();
                 AddOrderToLocation(order);
-                context.SaveChangesAsync();
+                context.SaveChanges();
                 AddOrderToCustomer(order);
-                context.SaveChangesAsync();
+                context.SaveChanges();
                 transaction.Commit();
             }
         }
@@ -135,7 +136,7 @@ namespace StoreDB
         public void RemoveInventory(InvItem invItem)
         {
             context.InvItems.Single(x => x.LocationId==currentLocation.Id && x.Product.Id==invItem.Product.Id).Quantity -= invItem.Quantity;
-            context.SaveChangesAsync();
+            context.SaveChanges();
         }
 
         public IShopRepo SetCurrentCustomer(int id)

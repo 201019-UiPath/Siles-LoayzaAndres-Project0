@@ -14,6 +14,8 @@ namespace StoreDB
         public DbSet<CartItem> CartItems {get; set;}
         public DbSet<OrderItem> OrderItems {get; set;}
         public DbSet<Product> Products {get; set;}
+        public DbSet<Order> Orders {get; set;}
+        public DbSet<Address> Addresses {get; set;}
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -31,11 +33,11 @@ namespace StoreDB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<InvItem>().HasKey(i => new { i.Product, i.LocationId });
+            modelBuilder.Entity<InvItem>().HasKey(i => new { i.ProductId, i.LocationId });
 
-            modelBuilder.Entity<CartItem>().HasKey(c => new { c.Product, c.CartId });
-            
-            modelBuilder.Entity<OrderItem>().HasKey(o => new { o.Product, o.OrderId });
+            modelBuilder.Entity<CartItem>().HasKey(c => new { c.ProductId, c.CartId });
+
+            modelBuilder.Entity<OrderItem>().HasKey(o => new { o.ProductId, o.OrderId });
         }
     }
 }

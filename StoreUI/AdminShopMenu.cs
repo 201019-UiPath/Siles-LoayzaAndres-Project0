@@ -65,10 +65,11 @@ namespace StoreUI
                 newLoc.Address.Zip = int.Parse(Console.ReadLine());
                 Console.Write("Enter country: ");
                 newLoc.Address.Country = Console.ReadLine();
+                newLoc.Inventory = new List<InvItem>();
                 this.shopService.AddLocation(newLoc);
                 Console.WriteLine($"New location {newLoc.Name} added!");
             }
-            else
+            else if (!UserInputIsX())
             {
                 Console.WriteLine("Invalid input. Please enter an integer.");
             }

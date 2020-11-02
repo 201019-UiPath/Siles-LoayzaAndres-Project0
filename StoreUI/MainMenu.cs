@@ -38,7 +38,8 @@ namespace StoreUI
 
         private void StartCustomerMenu()
         {
-            subMenu = new ShopMenu(repo.SetCurrentCustomer(1));
+            repo.SetCurrentCustomer(1); //TODO: REMOVE HARD CODE
+            subMenu = new ShopMenu(repo);
             subMenu.Start();
         }
 
