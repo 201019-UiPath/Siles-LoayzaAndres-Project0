@@ -11,7 +11,7 @@ namespace StoreUI
 
         protected bool UserInputIsX()
         {
-            string validXpattern = "x|X";
+            string validXpattern = "^x|X$";
             return Regex.IsMatch(userInput, validXpattern);
         }
 

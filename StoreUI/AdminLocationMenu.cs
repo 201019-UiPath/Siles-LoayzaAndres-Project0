@@ -1,18 +1,19 @@
 using System;
 using StoreDB;
 using System.Text.RegularExpressions;
+using StoreDB.Models;
 
 namespace StoreUI
 {
     internal class AdminLocationMenu : LocationMenu
     {
-        public AdminLocationMenu(Location location) : base(location){}
+        public AdminLocationMenu(ILocationRepo repo) : base(repo){}
         
         public override void Start()
         {
             do
             {
-                Console.WriteLine($"\nWelcome to our {location.Name} location, admin!");
+                Console.WriteLine($"\nWelcome to our {locationService.GetName()} location, admin!");
                 Console.WriteLine("[0] View inventory");
                 Console.WriteLine("[1] Add stock");
                 Console.WriteLine("[2] Add new product");

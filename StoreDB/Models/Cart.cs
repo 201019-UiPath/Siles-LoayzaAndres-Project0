@@ -1,45 +1,60 @@
 using System;
 using System.Collections.Generic;
 
-namespace StoreDB
+namespace StoreDB.Models
 {
     public class Cart
     {
-        List<Stock> products;
+        public List<Stock> Products {get; set;}
+
         public int Count
         {
             get
             {
-                return products.Count;
+                return Products.Count;
+            }
+        }
+
+        public decimal Cost
+        {
+            get
+            {
+                decimal total = 0;
+                foreach(var stock in Products)
+                {
+                    total += (stock.Quantity * stock.Product.Price);
+                }
+                return total;
             }
         }
 
         public Cart()
         {
-            products = new List<Stock>();
+            Products = new List<Stock>();
         }
 
-        /*
-        public void AddProduct(Product product, int numOfProduct)
+        public void QuickWrite()
         {
-            //if product is already in cart, add num of product to stock
-            if (!location.HasProduct(stock.Product))
+            Console.WriteLine($"{Count} products in your cart.");
+            foreach(var stock in Products)
             {
-                location.Inventory.Add(stock);
+                Console.WriteLine($"{stock.Product.Name}");
+                Console.WriteLine($"    Quantity: {stock.Quantity}");
             }
-            else {
-                System.Console.WriteLine("Error! Product already exists!");
-            }
+            Console.WriteLine($"Subtotal: ${Cost}");
         }
-        */
 
         public void Write()
         {
             Console.WriteLine($"{Count} products in your cart.");
-            foreach(var stock in products)
+            int i = 0;
+            foreach(var stock in Products)
             {
+                Console.Write($"[{i}] ");
                 stock.Write();
+                i++;
             }
+            Console.WriteLine($"Subtotal: ${Cost}");
         }
     }
 }

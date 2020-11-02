@@ -1,29 +1,38 @@
 using System;
 using System.Collections.Generic;
 using StoreDB;
+using StoreDB.Models;
 
 namespace StoreLib
 {
+    /// <summary>
+    /// Provides service for a specific location, based on the LocationRepo
+    /// given in the constructor. The business logic for accessing a location's
+    /// inventory and order history is contained here.
+    /// </summary>
     public class LocationService
     {
-        private Location location;
+        private ILocationRepo repo;
 
-        public LocationService(Location location)
+        public LocationService(ILocationRepo repo)
         {
-            this.location = location;
-            this.location.Inventory = LocationRepo.GetInventory();
+            this.repo = repo;
         }
 
-        public int GetInventoryCount()
+        /// <summary>
+        /// Returns the name of this Location.
+        /// </summary>
+        /// <returns></returns>
+        public string GetName()
         {
-            return this.location.Inventory.Count;
+            return repo.GetLocation().Name;
         }
 
         public void AddNewProductToInventory(Stock stock)
         {
             if (!HasProduct(stock.Product))
             {
-                location.Inventory.Add(stock);
+                repo.AddNewProduct(stock);
             }
             else {
                 System.Console.WriteLine("Error! Product already exists!");
@@ -32,8 +41,9 @@ namespace StoreLib
 
         public void WriteInventory()
         {
+            List<Stock> inventory = repo.GetInventory();
             int i=0;
-            foreach(var stock in location.Inventory)
+            foreach(var stock in inventory)
             {
                 Console.Write($"[{i}] ");
                 stock.Write();
@@ -50,7 +60,8 @@ namespace StoreLib
         /// <returns>true if given Product is in this Inventory</returns>
         public bool HasProduct(Product product)
         {
-            foreach(var stock in location.Inventory)
+            List<Stock> inventory = repo.GetInventory();
+            foreach(var stock in inventory)
             {
                 if(stock.Product.Equals(product))
                 {
@@ -62,14 +73,14 @@ namespace StoreLib
 
         public Product GetProductByIndex(int index)
         {
-            return location.Inventory[index].Product;
+            return repo.GetInventory()[index].Product;
         }
 
         public void AddToStock(int index, int quantityAdded)
         {
-            if (index<location.Inventory.Count)
+            if (index<repo.GetInventory().Count)
             {
-                location.Inventory[index].Quantity += quantityAdded;
+                repo.AddToProductQuantity(index, quantityAdded);
             }
             else
             {

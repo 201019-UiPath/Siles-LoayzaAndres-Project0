@@ -1,9 +1,22 @@
 using System;
+using System.Collections.Generic;
+using StoreDB;
+using StoreDB.Models;
+using StoreLib;
 
 namespace StoreUI
 {
-    internal class AdminShopMenu : ShopMenu
+    internal class AdminShopMenu : Menu
     {
+        protected IShopRepo repo;
+        protected ShopService shopService;
+
+        public AdminShopMenu(IShopRepo repo)
+        {
+            this.repo = repo;
+            this.shopService = new ShopService(repo);
+        }
+
         public override void Start()
         {
             do
@@ -16,18 +29,36 @@ namespace StoreUI
             } while (!UserInputIsX());
         } 
 
-        protected override void readInput()
+        /// <summary>
+        /// Outputs the list of locations into the console, each preceded by 
+        /// its index.
+        /// </summary>
+        protected void writeLocations()
+        {
+            List<Location> locations = shopService.GetLocations();
+            foreach (Location loc in locations)
+            {
+                Console.WriteLine($"[{locations.IndexOf(loc)}] {loc.Name}");
+            }
+        }
+
+        protected void readInput()
         {
             userInput = Console.ReadLine();
-                foreach(var location in locations)
+            if (UserInputIsInt())
+            {
+                int index = int.Parse(userInput);
+                if (shopService.HasLocation(index))
                 {
-                    if (userInput==locationIndex(location))
-                    {
-                        subMenu = new AdminLocationMenu(location);
-                        subMenu.Start();
-                        break;
-                    }
+                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(index));
+                    subMenu.Start();
                 }
+                
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter an integer.");
+            }
         }       
     }
 }

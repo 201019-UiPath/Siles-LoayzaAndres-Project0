@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace StoreDB
+namespace StoreDB.Models
 {
     /// <summary>
     /// Represents a store location, including address, inventory, and order
@@ -28,12 +28,15 @@ namespace StoreDB
 
         public List<Order> Orders {get; set;}
 
-        public Location(string name, Address address)
+        public Dictionary<int, Cart> Carts {get; set;}
+
+        public Location(int id, string name, Address address)
         {
             this.Name = name;
             this.Address = address;
             this.Inventory = new List<Stock>();
             this.Orders = new List<Order>();
+            this.Carts = new Dictionary<int, Cart>();
         }
 
     }

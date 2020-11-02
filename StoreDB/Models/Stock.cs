@@ -1,4 +1,4 @@
-namespace StoreDB
+namespace StoreDB.Models
 {
     public class Stock
     {

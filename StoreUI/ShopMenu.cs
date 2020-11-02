@@ -2,6 +2,7 @@ using System;
 using StoreDB;
 using StoreLib;
 using System.Collections.Generic;
+using StoreDB.Models;
 
 namespace StoreUI
 {
@@ -10,8 +11,14 @@ namespace StoreUI
     /// </summary>
     internal class ShopMenu : Menu
     {
-        protected Shop shop;
-        protected List<Location> locations;
+        protected IShopRepo repo;
+        protected CustomerService service;
+
+        public ShopMenu(IShopRepo repo)
+        {
+            this.repo = repo;
+            this.service = new CustomerService(repo);
+        }
 
         /// <summary>
         /// Runs the menu in console
@@ -21,11 +28,40 @@ namespace StoreUI
             do
             {
                 Console.WriteLine("Welcome to the shop!");
-                Console.WriteLine("\nPlease select a store location.");
-                writeLocations();
-                Console.WriteLine("[X] Back to Main Menu");
-                readInput();
+                Console.WriteLine("[0] Shop");
+                Console.WriteLine("[1] View Orders");
+                userInput = Console.ReadLine();
+                switch (userInput)
+                {
+                    case "0":
+                        SelectLocation();
+                        break;
+                    case "1":
+                        ViewOrders();
+                        break;
+                }
             } while (!UserInputIsX());
+        }
+
+        protected void SelectLocation()
+        {
+            Console.WriteLine("\nPlease select a store location.");
+            writeLocations();
+            userInput = Console.ReadLine();
+            if (UserInputIsInt())
+            {
+                int index = int.Parse(userInput);
+                if (service.HasLocation(index))
+                {
+                    subMenu = new LocationMenu(repo.SetCurrentLocation(index));
+                    subMenu.Start();
+                }
+                
+            }
+            else
+            {
+                Console.WriteLine("Invalid input. Please enter an integer.");
+            }
         }
 
         /// <summary>
@@ -34,43 +70,17 @@ namespace StoreUI
         /// </summary>
         protected void writeLocations()
         {
-            this.shop = new Shop();
-            locations = shop.GetLocations();
-            foreach (var location in locations)
+            List<Location> locations = service.GetLocations();
+            foreach (Location loc in locations)
             {
-                Console.WriteLine($"[{locationIndex(location)}] {location.Name}");
+                Console.WriteLine($"[{locations.IndexOf(loc)}] {loc.Name}");
             }
         }
 
-        /// <summary>
-        /// Reads a line of console input and iterates through List of
-        /// locations to find user choice based on index. If location is found,
-        /// creates a new LocationMenu, assigns subMenu, and calls Start().
-        /// Else, returns void.
-        /// </summary>
-        protected virtual void readInput()
+        protected void ViewOrders()
         {
-            userInput = Console.ReadLine();
-                foreach(var location in locations)
-                {
-                    if (userInput==locationIndex(location))
-                    {
-                        subMenu = new LocationMenu(location);
-                        subMenu.Start();
-                        break;
-                    }
-                }
-        }
-
-        /// <summary>
-        /// Returns the index of the given location in the locations List as a
-        /// string.
-        /// </summary>
-        /// <param name="location"></param>
-        /// <returns>index of the given location as a string</returns>
-        protected string locationIndex(Location location)
-        {
-            return locations.IndexOf(location).ToString();
+            Console.WriteLine("Viewing your orders.");
+            service.WriteOrders();
         }
     }
 }

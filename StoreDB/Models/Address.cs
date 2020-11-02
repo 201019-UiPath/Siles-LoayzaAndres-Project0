@@ -1,4 +1,4 @@
-namespace StoreDB
+namespace StoreDB.Models
 {
     public class Address
     {
@@ -63,6 +63,11 @@ namespace StoreDB
             this.zip = zip;
             this.state = state;
             this.country = country;
+        }
+
+        public override string ToString()
+        {
+            return $"{street} {city}, {state} {zip}, {country}";
         }
     }
 }

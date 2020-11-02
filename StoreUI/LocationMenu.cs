@@ -1,29 +1,28 @@
 using System;
 using StoreDB;
 using StoreLib;
-using System.Text.RegularExpressions;
-using System.Collections.Generic;
+using StoreDB.Models;
 
 namespace StoreUI
 {
     internal class LocationMenu : Menu
     {
-        protected Location location;
+        private ILocationRepo repo;
         protected LocationService locationService;
         protected CartService cartService;
 
-        public LocationMenu(Location location)
+        public LocationMenu(ILocationRepo repo)
         {
-            this.location = location;
-            this.locationService = new LocationService(location);
-            this.cartService = new CartService();
+            this.repo = repo;
+            this.locationService = new LocationService(repo);
+            this.cartService = new CartService(repo);
         }
 
         public override void Start()
         {
             do
             {
-                Console.WriteLine($"\nWelcome to our {location.Name} location!");
+                Console.WriteLine($"\nWelcome to our {locationService.GetName()} location!");
                 Console.WriteLine("[0] View products");
                 Console.WriteLine("[1] View cart");
                 Console.WriteLine("[X] Back to previous menu");
@@ -34,19 +33,20 @@ namespace StoreUI
                         ViewProducts();
                         break;
                     case "1":
-                        ViewCart();
+                        subMenu = new CartMenu(repo);
+                        subMenu.Start();
                         break;
                 }
             } while (!UserInputIsX());
         }
 
-        protected void ViewProducts()
+        private void ViewProducts()
         {
             do 
             {
-                Console.WriteLine($"\nViewing products for {location.Name} location.");
-                Console.WriteLine("Enter product number to add to cart, or enter X to go back.");
+                Console.WriteLine($"\nViewing products for {locationService.GetName()} location.");
                 locationService.WriteInventory();
+                Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
                 userInput = Console.ReadLine();
                 if (UserInputIsInt())
                 {
@@ -59,21 +59,6 @@ namespace StoreUI
                     Console.WriteLine("Invalid input. Please enter an integer value.");
                 }
             } while (!UserInputIsX());
-            userInput = "";
-        }
-
-        private void ViewCart()
-        {
-            do
-            {
-                Console.WriteLine("\nViewing cart.");
-                cartService.WriteCart();
-                Console.WriteLine("[0] Remove product");
-                Console.WriteLine("[1] Empty cart");
-                Console.WriteLine("[2] Checkout order");
-                Console.WriteLine("[X] Return to previous menu");
-                userInput = Console.ReadLine();
-            } while(!UserInputIsX());
             userInput = "";
         }
 

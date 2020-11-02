@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace StoreDB
+namespace StoreDB.Models
 {
     /// <summary>
     /// Represents an individual product
@@ -10,7 +10,7 @@ namespace StoreDB
         /// <summary>
         /// ID number for this Product
         /// </summary>
-        public int Id {get; private set;}
+        public int Id {get; set;}
 
         /// <summary>
         /// Price in USD for this product

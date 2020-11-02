@@ -1,31 +1,51 @@
 using System;
+using StoreDB;
+using StoreDB.Models;
 
 namespace StoreUI
 {
     internal class MainMenu : Menu
     {
+        private IRepo repo;
+
+        public MainMenu()
+        {
+            this.repo = new FalseRepo();
+        }
+
         public override void Start()
         {
 
             do
             {
                 Console.WriteLine("\nWelcome!");
-                Console.WriteLine("What would you like to do today?");
-                Console.WriteLine("[0] Shop");
+                Console.WriteLine("Are you a customer or an admin?");
+                Console.WriteLine("[0] Customer");
+                Console.WriteLine("[1] Admin");
                 Console.WriteLine("[X] Quit");
                 userInput = Console.ReadLine();
                 switch (userInput)
                 {
                     case "0":
-                        subMenu = new ShopMenu();
-                        subMenu.Start();
+                        StartCustomerMenu();
                         break;
-                    case "A":
-                        subMenu = new AdminMainMenu();
-                        subMenu.Start();
+                    case "1":
+                        StartAdminMenu();
                         break;
                 }
             } while (!UserInputIsX());
+        }
+
+        private void StartCustomerMenu()
+        {
+            subMenu = new ShopMenu(repo.SetCurrentCustomer(0));
+            subMenu.Start();
+        }
+
+        private void StartAdminMenu()
+        {
+            subMenu = new AdminShopMenu(repo);
+            subMenu.Start();
         }
 
     }
