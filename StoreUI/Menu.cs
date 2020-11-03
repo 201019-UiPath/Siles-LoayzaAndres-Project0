@@ -11,14 +11,12 @@ namespace StoreUI
 
         protected bool UserInputIsX()
         {
-            string validXpattern = "^x|X$";
-            return Regex.IsMatch(userInput, validXpattern);
+            return Regex.IsMatch(userInput, "^x|X$");
         }
 
         protected bool UserInputIsInt()
         {
-            string validIntpattern = "^[0-9]+$";
-            return Regex.IsMatch(userInput, validIntpattern);
+            return Regex.IsMatch(userInput, "^[0-9]+$");
         }
     }
 

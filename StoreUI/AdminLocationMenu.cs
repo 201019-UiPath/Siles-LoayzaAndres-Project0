@@ -115,12 +115,37 @@ namespace StoreUI
 
         protected void ViewOrders()
         {
-            List<Order> orders = locationService.GetOrders();
-            Console.WriteLine($"Viewing {orders.Count} orders.");
-            foreach(Order o in orders)
+            Console.WriteLine($"Viewing orders.");
+            locationService.WriteOrdersByDateDescend();
+            do 
             {
-                o.Write();
-            }
+                Console.WriteLine("\n[0] Sort by most recent");
+                Console.WriteLine("[1] Sort by oldest");
+                Console.WriteLine("[2] Sort by least expensive");
+                Console.WriteLine("[3] Sort by most expensive");
+                Console.WriteLine("[X] Return to previous menu");
+                userInput = Console.ReadLine();
+                switch(userInput)
+                {
+                    case "0":
+                        Console.WriteLine("\nViewing your orders.");
+                        locationService.WriteOrdersByDateDescend();
+                        break;
+                    case "1":
+                        Console.WriteLine("\nViewing your orders.");
+                        locationService.WriteOrdersByDateAscend();
+                        break;
+                    case "2":
+                        Console.WriteLine("\nViewing your orders.");
+                        locationService.WriteOrdersByCostAscend();
+                        break;
+                    case "3":
+                        Console.WriteLine("\nViewing your orders.");
+                        locationService.WriteOrdersByCostDescend();
+                        break;
+                }
+            } while (!UserInputIsX());
+            userInput = "";
         }
     }
 }

@@ -27,20 +27,15 @@ namespace StoreUI
             {
                 Console.WriteLine($"\nWelcome to our {locationService.Location.Name} location!");
                 Console.WriteLine("[0] Shop products");
-                Console.WriteLine("[1] Add product to cart");
-                Console.WriteLine("[2] Go to cart");
+                Console.WriteLine("[1] Go to cart");
                 Console.WriteLine("[X] Back to previous menu");
                 userInput = Console.ReadLine();
                 switch (userInput)
                 {
                     case "0":
-                        Console.WriteLine($"\nViewing products for {locationService.Location.Name} location.");
-                        locationService.WriteInventory();
+                        ShopProducts();
                         break;
                     case "1":
-                        AddProductToCart();
-                        break;
-                    case "2":
                         subMenu = new CartMenu(cartService);
                         subMenu.Start();
                         break;
@@ -48,18 +43,18 @@ namespace StoreUI
             } while (!UserInputIsX());
         }
 
-        private void AddProductToCart()
+        private void ShopProducts()
         {
-            Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
-            List<InvItem> inventory = locationService.GetInventory();
-            locationService.WriteInventory();
             do 
             {
+                Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
+                List<InvItem> inventory = locationService.GetInventory();
+                locationService.WriteInventory();
                 userInput = Console.ReadLine();
                 if (UserInputIsInt() && int.Parse(userInput)<inventory.Count)
                 {
                     InvItem item = inventory[int.Parse(userInput)];
-                    AddProductQuantity(item.Product);
+                    AddProductToCart(item.Product);
                 }
                 else if (!UserInputIsX())
                 {
@@ -69,17 +64,16 @@ namespace StoreUI
             userInput = "";
         }
 
-        private void AddProductQuantity(Product product)
+        private void AddProductToCart(Product product)
         {
             do
             {
                 Console.WriteLine($"\nAdding \"{product.Name}\" to cart. Enter X to cancel.");
                 Console.Write($"Enter quantity for \"{product.Name}\": ");
                 userInput = Console.ReadLine();
-                int quantity = 1;
                 if (UserInputIsInt())
                 {
-                    quantity = int.Parse(userInput);
+                    int quantity = int.Parse(userInput);
                     try
                     {
                         cartService.AddToCart(new CartItem(product, quantity));

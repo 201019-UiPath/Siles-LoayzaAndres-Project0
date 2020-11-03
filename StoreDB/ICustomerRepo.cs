@@ -1,13 +1,15 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using StoreDB.Models;
 
 namespace StoreDB
 {
-    public interface ICustomerRepo : IStoreRepo
+    public interface ICustomerRepo
     {
         Customer GetDefaultCustomer();
-        
-        List<Order> GetCustomerOrders(int customerId);
+        List<Order> GetOrdersAscend(Func<Order, bool> where, Func<Order, Object> orderBy);
+        List<Order> GetOrdersDescend(Func<Order, bool> where, Func<Order, Object> orderBy);
+        List<Location> GetLocations();
+        List<OrderItem> GetOrderItems(int orderId);
     }
 }

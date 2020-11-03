@@ -1,6 +1,6 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using StoreDB.Models;
 
@@ -13,6 +13,12 @@ namespace StoreDB
         public DBRepo(StoreContext context)
         {
             this.context = context;
+        }
+
+        public void AddCart(Cart cart)
+        {
+            context.Carts.Add(cart);
+            context.SaveChanges();
         }
 
         public void AddLocation(Location location)
@@ -39,19 +45,6 @@ namespace StoreDB
             context.SaveChanges();
         }
 
-        private void CreateCartIfItDoesNotExist(int customerId, int locationId)
-        {
-            if (!context.Carts.Any(x => x.CustomerId==customerId && x.LocationId==locationId))
-            {
-                Cart cart = new Cart();
-                cart.LocationId = locationId;
-                cart.CustomerId = customerId;
-                cart.Items = new List<CartItem>();
-                context.Carts.Add(cart);
-                context.SaveChanges();
-            }
-        }
-
         public void EmptyCart(int cartId)
         {
             context.Carts.Include("Items").Single(x => x.Id==cartId).Items.Clear();
@@ -60,8 +53,12 @@ namespace StoreDB
 
         public Cart GetCart(int customerId, int locationId)
         {
-            CreateCartIfItDoesNotExist(customerId, locationId);
             return context.Carts.Single(x => x.CustomerId == customerId && x.LocationId == locationId);
+        }
+
+        public CartItem GetCartItem(int cartId, int productId)
+        {
+            return context.CartItems.Single(x => x.CartId==cartId && x.ProductId==productId);
         }
 
         public List<CartItem> GetCartItems(int cartId)
@@ -69,16 +66,7 @@ namespace StoreDB
             return context.CartItems.Include("Product").Where(x => x.CartId==cartId).ToList();
         }
 
-        public List<Order> GetCustomerOrders(int customerId)
-        {
-            List<Order> orders = context.Orders.Where(x => x.CustomerId==customerId).ToList();
-            foreach(Order o in orders)
-            {
-                o.Items = context.OrderItems.Include("Product").Where(x => x.OrderId == o.Id).ToList();
-            }
-            return orders;
-        }
-
+        //TODO: Remove business logic
         public Customer GetDefaultCustomer()
         {
             if (!context.Customers.Any(x => true))
@@ -97,36 +85,64 @@ namespace StoreDB
             return context.InvItems.Include("Product").Where(x => x.LocationId==locationId).ToList();
         }
 
-        public Task<List<Location>> GetLocations()
+        public List<Location> GetLocations()
         {
-            return context.StoreLocations.Select(x => x).ToListAsync();
+            return context.StoreLocations.Select(x => x).ToList();
         }
 
-        public List<Order> GetLocationOrders(int locationId)
+        public List<Order> GetOrdersAscend(Func<Order, bool> where, Func<Order, Object> orderBy)
         {
-            List<Order> orders = context.Orders.Where(x => x.LocationId==locationId).ToList();
-            foreach(Order o in orders)
-            {
-                o.Items = context.OrderItems.Include("Product").Where(x => x.OrderId == o.Id).ToList();
-                o.CustomerAddress = context.Addresses.Single(x => x.Id == o.CustomerId);
-            }
-            return orders;
+            return context.Orders.Include("CustomerAddress")
+                                 .Where(where)
+                                 .OrderBy(orderBy)
+                                 .ToList();
         }
 
-        public void PlaceOrder(int locationId, int cartId, Order order)
+        public List<Order> GetOrdersDescend(Func<Order, bool> where, Func<Order, Object> orderBy)
+        {
+            return context.Orders.Include("CustomerAddress")
+                                 .Where(where)
+                                 .OrderByDescending(orderBy)
+                                 .ToList();
+        }
+
+        public List<OrderItem> GetOrderItems(int orderId)
+        {
+            return context.OrderItems.Include("Product").Where(x => x.OrderId==orderId).ToList();
+        }
+
+        public bool HasCart(int customerId, int locationId)
+        {
+            return context.Carts.Any(x => x.CustomerId==customerId && x.LocationId==locationId);
+        }
+
+        public bool HasCartItem(CartItem item)
+        {
+            return context.CartItems.Any(x => x.CartId==item.CartId && x.ProductId==item.ProductId);
+        }
+
+        public void PlaceOrderTransaction(int locationId, int cartId, Order order)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
-                foreach(CartItem item in GetCartItems(cartId))
+                try
                 {
-                    ReduceInventory(locationId, item.ProductId, item.Quantity);
+                    foreach(CartItem item in GetCartItems(cartId))
+                    {
+                        ReduceInventory(locationId, item.ProductId, item.Quantity);
+                    }
+                    context.SaveChanges();
+                    EmptyCart(cartId);
+                    context.SaveChanges();
+                    context.Orders.Add(order);
+                    context.SaveChanges();
+                    transaction.Commit();
                 }
-                context.SaveChanges();
-                EmptyCart(cartId);
-                context.SaveChanges();
-                context.Orders.Add(order);
-                context.SaveChanges();
-                transaction.Commit();
+                catch (Exception)
+                {
+                    transaction.Rollback();
+                    throw;
+                }
             }
         }
 
@@ -139,6 +155,12 @@ namespace StoreDB
         public void ReduceInventory(int locationId, int productId, int quantity)
         {
             context.InvItems.Single(x => x.LocationId==locationId && x.Product.Id==productId).Quantity -= quantity;
+            context.SaveChanges();
+        }
+
+        public void UpdateCartItemQuantity(CartItem item)
+        {
+            context.CartItems.Single(x => x.CartId==item.CartId && x.ProductId==item.ProductId).Quantity = item.Quantity;
             context.SaveChanges();
         }
     }

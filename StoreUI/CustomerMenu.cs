@@ -8,7 +8,8 @@ using System.Text.RegularExpressions;
 namespace StoreUI
 {
     /// <summary>
-    /// The shop menu that list locations to shop at
+    /// The customer menu that list locations to shop at and includes the
+    /// option to view customer orders.
     /// </summary>
     internal class CustomerMenu : Menu
     {
@@ -65,7 +66,36 @@ namespace StoreUI
         protected void ViewOrders()
         {
             Console.WriteLine("\nViewing your orders.");
-            service.WriteOrders();
+            service.WriteOrdersByDateDescend();
+            do 
+            {
+                Console.WriteLine("\n[0] Sort by most recent");
+                Console.WriteLine("[1] Sort by oldest");
+                Console.WriteLine("[2] Sort by least expensive");
+                Console.WriteLine("[3] Sort by most expensive");
+                Console.WriteLine("[X] Return to previous menu");
+                userInput = Console.ReadLine();
+                switch(userInput)
+                {
+                    case "0":
+                        Console.WriteLine("\nViewing your orders.");
+                        service.WriteOrdersByDateDescend();
+                        break;
+                    case "1":
+                        Console.WriteLine("\nViewing your orders.");
+                        service.WriteOrdersByDateAscend();
+                        break;
+                    case "2":
+                        Console.WriteLine("\nViewing your orders.");
+                        service.WriteOrdersByCostAscend();
+                        break;
+                    case "3":
+                        Console.WriteLine("\nViewing your orders.");
+                        service.WriteOrdersByCostDescend();
+                        break;
+                }
+            } while (!UserInputIsX());
+            userInput = "";
         }
     }
 }

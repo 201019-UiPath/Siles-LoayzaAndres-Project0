@@ -17,18 +17,33 @@ namespace StoreLib
             this.repo = repo;
             this.Customer = customer;
             this.Location = location;
+            CreateCartIfItDoesntExist();
             this.Cart = repo.GetCart(Customer.Id, Location.Id);
         }
 
         public void AddToCart(CartItem item)
         {
             item.CartId = Cart.Id;
-            repo.AddCartItem(item);
+            if (repo.HasCartItem(item))
+            {
+                item.Quantity += repo.GetCartItem(Cart.Id, item.ProductId).Quantity;
+                repo.UpdateCartItemQuantity(item);
+            }
+            else
+            {
+                repo.AddCartItem(item);
+            }
         }
 
-        public void RemoveCartItem(CartItem cartItem)
+        private void CreateCartIfItDoesntExist()
         {
-            repo.RemoveCartItem(cartItem);
+            if (!repo.HasCart(Customer.Id, Location.Id))
+            {
+                Cart cart = new Cart();
+                cart.LocationId = Location.Id;
+                cart.CustomerId = Customer.Id;
+                repo.AddCart(cart);
+            }
         }
 
         public void EmptyCart()
@@ -39,20 +54,6 @@ namespace StoreLib
         public List<CartItem> GetCartItems()
         {
             return repo.GetCartItems(Cart.Id);
-        }
-
-        public void WriteCart()
-        {
-            List<CartItem> items = GetCartItems();
-            Console.WriteLine($"{items.Count} products in your cart.");
-            int i = 0;
-            foreach(var item in items)
-            {
-                Console.Write($"[{i}] ");
-                item.Write();
-                i++;
-            }
-            Console.WriteLine($"Subtotal: ${Cart.Cost}");
         }
 
         public Order PlaceOrder()
@@ -70,9 +71,28 @@ namespace StoreLib
             }
             order.Cost = Cart.Cost;
 
-            repo.PlaceOrder(Location.Id, Cart.Id, order);
+            repo.PlaceOrderTransaction(Location.Id, Cart.Id, order);
             
             return order;
+        }
+
+        public void RemoveCartItem(CartItem cartItem)
+        {
+            repo.RemoveCartItem(cartItem);
+        }
+
+        public void WriteCart()
+        {
+            List<CartItem> items = GetCartItems();
+            Console.WriteLine($"{items.Count} products in your cart.");
+            int i = 0;
+            foreach(var item in items)
+            {
+                Console.Write($"[{i}] ");
+                item.Write();
+                i++;
+            }
+            Console.WriteLine($"Subtotal: ${Cart.Cost}");
         }
     }
 }

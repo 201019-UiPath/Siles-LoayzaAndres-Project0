@@ -33,10 +33,11 @@ namespace StoreDB
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            //composite key for InvItems: productId and locationId
             modelBuilder.Entity<InvItem>().HasKey(i => new { i.ProductId, i.LocationId });
-
+            //composite key for CartItems: productId and cartId
             modelBuilder.Entity<CartItem>().HasKey(c => new { c.ProductId, c.CartId });
-
+            //composite key for OrderItems: productId and orderId
             modelBuilder.Entity<OrderItem>().HasKey(o => new { o.ProductId, o.OrderId });
         }
     }

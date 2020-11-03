@@ -1,11 +1,12 @@
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using StoreDB.Models;
 
 namespace StoreDB
 {
-    public interface IAdminRepo : IStoreRepo
+    public interface IAdminRepo
     {
         void AddLocation(Location location);
+
+        List<Location> GetLocations();
     }
 }

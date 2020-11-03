@@ -20,7 +20,7 @@ namespace StoreLib
 
         public List<Location> GetLocations()
         {
-            return repo.GetLocations().Result;
+            return repo.GetLocations();
         }
     }
 }

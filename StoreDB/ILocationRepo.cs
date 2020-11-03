@@ -1,5 +1,5 @@
+using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using StoreDB.Models;
 
 namespace StoreDB
@@ -11,6 +11,8 @@ namespace StoreDB
         void ReduceInventory(int locationId, int productId, int quantity);
         void AddNewProduct(InvItem invItem);
         void AddToProductQuantity(int locationId, int productId, int quantityAdded);
-        List<Order> GetLocationOrders(int locationId);
+        List<Order> GetOrdersAscend(Func<Order, bool> where, Func<Order, Object> orderBy);
+        List<Order> GetOrdersDescend(Func<Order, bool> where, Func<Order, Object> orderBy);
+        List<OrderItem> GetOrderItems(int orderId);
     }
 }

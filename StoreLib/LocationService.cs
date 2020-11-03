@@ -75,9 +75,38 @@ namespace StoreLib
             repo.AddToProductQuantity(Location.Id, productId, quantityAdded);
         }
 
-        public List<Order> GetOrders()
+        private void WriteOrders(List<Order> orders)
         {
-            return repo.GetLocationOrders(Location.Id);
+            foreach(Order o in orders)
+            {
+                o.Items = repo.GetOrderItems(o.Id);
+                o.Write();
+            }
+            Console.WriteLine($"{orders.Count} orders found.");
+        }
+
+        public void WriteOrdersByDateAscend()
+        {
+            List<Order> orders = repo.GetOrdersAscend((x => x.LocationId==Location.Id), (x => x.DateTime));
+            WriteOrders(orders);
+        }
+
+        public void WriteOrdersByDateDescend()
+        {
+            List<Order> orders = repo.GetOrdersDescend((x => x.LocationId==Location.Id), (x => x.DateTime));
+            WriteOrders(orders);
+        }
+
+        public void WriteOrdersByCostAscend()
+        {
+            List<Order> orders = repo.GetOrdersAscend((x => x.LocationId==Location.Id), (x => x.Cost));
+            WriteOrders(orders);
+        }
+
+        public void WriteOrdersByCostDescend()
+        {
+            List<Order> orders = repo.GetOrdersDescend((x => x.LocationId==Location.Id), (x => x.Cost));
+            WriteOrders(orders);
         }
     }
 }
