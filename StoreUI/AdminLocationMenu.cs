@@ -2,12 +2,18 @@ using System;
 using StoreDB;
 using System.Text.RegularExpressions;
 using StoreDB.Models;
+using StoreLib;
+using System.Collections.Generic;
 
 namespace StoreUI
 {
-    internal class AdminLocationMenu : LocationMenu
+    internal class AdminLocationMenu : CustomerLocationMenu
     {
-        public AdminLocationMenu(ILocationRepo repo) : base(repo){}
+        AdminService adminService;
+        public AdminLocationMenu(ILocationRepo repo, AdminService adminService) : base(repo)
+        {
+            this.adminService = adminService;
+        }
         
         public override void Start()
         {
@@ -17,6 +23,7 @@ namespace StoreUI
                 Console.WriteLine("[0] View inventory");
                 Console.WriteLine("[1] Add quantity");
                 Console.WriteLine("[2] Add new product");
+                Console.WriteLine("[3] View orders");
                 Console.WriteLine("[X] Back to location select");
                 userInput = Console.ReadLine();
                 switch(userInput)
@@ -29,6 +36,9 @@ namespace StoreUI
                         break;
                     case "2":
                         AddNewProduct();
+                        break;
+                    case "3":
+                        ViewOrders();
                         break;
                 }
             } while (!UserInputIsX());
@@ -99,6 +109,16 @@ namespace StoreUI
                 Console.Read();
             }
             userInput = "";
+        }
+
+        protected void ViewOrders()
+        {
+            List<Order> orders = adminService.GetOrders();
+            Console.WriteLine($"Viewing {orders.Count} orders.");
+            foreach(Order o in orders)
+            {
+                o.Write();
+            }
         }
     }
 }

@@ -25,6 +25,11 @@ namespace StoreDB.Models
             }
         }
 
+        public Cart()
+        {
+            Items = new List<CartItem>();
+        }
+
         public void QuickWrite()
         {
             Console.WriteLine($"{Count} products in your cart.");

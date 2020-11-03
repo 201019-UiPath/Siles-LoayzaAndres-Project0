@@ -1,10 +1,16 @@
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using StoreDB.Models;
 
 namespace StoreDB
 {
-    public interface ICustomerRepo
+    public interface ICustomerRepo : IStoreRepo
     {
-         Customer GetCustomer();
-         void AddOrderToCustomer(Order order);
+        Customer GetCustomer();
+        
+        List<Order> GetCustomerOrders();
+
+        ICustomerRepo SetCurrentCustomer(int index);
+
     }
 }

@@ -5,13 +5,13 @@ using StoreDB.Models;
 
 namespace StoreUI
 {
-    internal class LocationMenu : Menu
+    internal class CustomerLocationMenu : Menu
     {
         private ILocationRepo repo;
         protected LocationService locationService;
         protected CartService cartService;
 
-        public LocationMenu(ILocationRepo repo)
+        public CustomerLocationMenu(ILocationRepo repo)
         {
             this.repo = repo;
             this.locationService = new LocationService(repo);
@@ -23,7 +23,7 @@ namespace StoreUI
             do
             {
                 Console.WriteLine($"\nWelcome to our {locationService.GetName()} location!");
-                Console.WriteLine("[0] View products");
+                Console.WriteLine("[0] Shop products");
                 Console.WriteLine("[1] Add product to cart");
                 Console.WriteLine("[2] Go to cart");
                 Console.WriteLine("[X] Back to previous menu");

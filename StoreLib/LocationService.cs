@@ -41,7 +41,7 @@ namespace StoreLib
 
         public void WriteInventory()
         {
-            List<InvItem> inventory = repo.GetInventory().Result;
+            List<InvItem> inventory = repo.GetInventory();
             int i=0;
             foreach(var item in inventory)
             {
@@ -60,7 +60,7 @@ namespace StoreLib
         /// <returns>true if given Product is in this Inventory</returns>
         public bool HasProduct(Product product)
         {
-            List<InvItem> inventory = repo.GetInventory().Result;
+            List<InvItem> inventory = repo.GetInventory();
             foreach(var invItem in inventory)
             {
                 if(invItem.Product.Equals(product))
@@ -73,12 +73,12 @@ namespace StoreLib
 
         public Product GetProductByIndex(int index)
         {
-            return repo.GetInventory().Result[index].Product;
+            return repo.GetInventory()[index].Product;
         }
 
         public void AddToInvItem(int index, int quantityAdded)
         {
-            if (index<repo.GetInventory().Result.Count)
+            if (index<repo.GetInventory().Count)
             {
                 repo.AddToProductQuantity(index, quantityAdded);
             }

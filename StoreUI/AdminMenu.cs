@@ -7,16 +7,16 @@ using StoreLib;
 
 namespace StoreUI
 {
-    internal class AdminShopMenu : Menu
+    internal class AdminMenu : Menu
     {
-        protected IShopRepo repo;
-        protected ShopService shopService;
+        protected IAdminRepo repo;
+        protected AdminService service;
         private List<Location> locations;
 
-        public AdminShopMenu(IShopRepo repo)
+        public AdminMenu(IAdminRepo repo)
         {
             this.repo = repo;
-            this.shopService = new ShopService(repo);
+            this.service = new AdminService(repo);
         }
 
         public override void Start()
@@ -25,7 +25,7 @@ namespace StoreUI
             {
                 Console.WriteLine("\nWelcome to the admin store selection!");
                 Console.WriteLine("Please select a store location.");
-                locations = shopService.GetLocations();
+                locations = service.GetLocations();
                 foreach (Location loc in locations)
                 {
                     Console.WriteLine($"[{locations.IndexOf(loc)}] {loc.Name}");
@@ -44,7 +44,7 @@ namespace StoreUI
                 int index = int.Parse(userInput);
                 if (index<locations.Count)
                 {
-                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(locations[index]));
+                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(locations[index]), service);
                     subMenu.Start();
                 }
                 
@@ -66,7 +66,7 @@ namespace StoreUI
                 Console.Write("Enter country: ");
                 newLoc.Address.Country = Console.ReadLine();
                 newLoc.Inventory = new List<InvItem>();
-                this.shopService.AddLocation(newLoc);
+                this.service.AddLocation(newLoc);
                 Console.WriteLine($"New location {newLoc.Name} added!");
             }
             else if (!UserInputIsX())

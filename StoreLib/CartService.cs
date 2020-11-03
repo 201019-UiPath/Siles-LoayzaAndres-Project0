@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using StoreDB;
 using StoreDB.Models;
@@ -8,60 +9,60 @@ namespace StoreLib
     {
         private ILocationRepo repo;
         private ICustomerRepo customerRepo;
+        private ICartRepo cartRepo;
 
         public CartService(ILocationRepo repo)
         {
             this.repo = repo;
             this.customerRepo = (ICustomerRepo)repo;
+            this.cartRepo = (ICartRepo)repo;
         }
 
         public void AddToCart(CartItem item)
         {
-            item.CartId = repo.GetCart().Result.Id;
-            repo.AddCartItem(item);
+            item.CartId = cartRepo.GetCart().Id;
+            cartRepo.AddCartItem(item);
         }
 
-        public void RemoveFromCart(int index)
+        public void RemoveProductFromCart(int productId)
         {
-            this.repo.RemoveFromCart(index);
+            cartRepo.RemoveProductFromCart(productId);
         }
 
         public void EmptyCart()
         {
-            this.repo.EmptyCart();
+            cartRepo.EmptyCart();
         }
 
-        public void QuickWriteCart()
+        public Cart GetCart()
         {
-            repo.GetCart().Result.QuickWrite();
+            return cartRepo.GetCart();
         }
 
         public void WriteCart()
         {
-            repo.GetCart().Result.Write();
+            cartRepo.GetCart().Write();
         }
 
         public Order PlaceOrder()
         {
             Location loc = repo.GetLocation();
             Customer custom = customerRepo.GetCustomer();
-            Cart cart = repo.GetCart().Result;
+            Cart cart = cartRepo.GetCart();
             Order order = new Order();
             order.LocationId = loc.Id;
             order.CustomerId = custom.Id;
             order.LocationAddress = loc.Address;
             order.CustomerAddress = custom.Address;
+            order.DateTime = DateTime.Now;
             order.Items = new List<OrderItem>();
             foreach(CartItem c in cart.Items)
             {
-                OrderItem o = new OrderItem();
-                o.Product = c.Product;
-                o.Quantity = c.Quantity;
-                order.Items.Add(o);
+                order.Items.Add(new OrderItem(c.Product, c.Quantity));
             }
             order.Cost = cart.Cost;
 
-            repo.PlaceOrder(order);
+            cartRepo.PlaceOrder(order);
             
             return order;
         }

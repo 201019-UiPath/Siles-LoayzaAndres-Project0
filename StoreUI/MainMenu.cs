@@ -39,13 +39,13 @@ namespace StoreUI
         private void StartCustomerMenu()
         {
             repo.SetCurrentCustomer(1); //TODO: REMOVE HARD CODE
-            subMenu = new ShopMenu(repo);
+            subMenu = new CustomerMenu(repo);
             subMenu.Start();
         }
 
         private void StartAdminMenu()
         {
-            subMenu = new AdminShopMenu(repo);
+            subMenu = new AdminMenu(repo);
             subMenu.Start();
         }
 

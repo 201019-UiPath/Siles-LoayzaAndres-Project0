@@ -2,17 +2,18 @@ using System;
 using StoreDB;
 using System.Text.RegularExpressions;
 using StoreDB.Models;
+using System.Collections.Generic;
 
 namespace StoreUI
 {
-    internal class CartMenu : LocationMenu
+    internal class CartMenu : CustomerLocationMenu
     {
         public CartMenu(ILocationRepo repo) : base(repo) {}
         public override void Start()
         {
             do
             {
-                Console.WriteLine("\nViewing cart.");
+                Console.WriteLine("\nWelcome to your cart.");
                 Console.WriteLine("[0] View products in cart");
                 Console.WriteLine("[1] Remove product");
                 Console.WriteLine("[2] Empty cart");
@@ -22,6 +23,7 @@ namespace StoreUI
                 switch (userInput)
                 {
                     case "0":
+                        Console.Write("\n");
                         cartService.WriteCart();
                         break;
                     case "1":
@@ -40,13 +42,14 @@ namespace StoreUI
         private void RemoveProduct()
         {
             Console.Write("Enter product number to remove, or X to go back: ");
-            //cartService.WriteCart();
+            Cart cart = cartService.GetCart();
+            cart.Write();
             userInput = Console.ReadLine();
             if (!UserInputIsX() && UserInputIsInt())
             {
                 try
                 {
-                    cartService.RemoveFromCart(int.Parse(userInput));
+                    cartService.RemoveProductFromCart(cart.Items[int.Parse(userInput)].ProductId);
                     Console.WriteLine("Removed product from cart.");
                 }
                 catch (Exception e)
@@ -83,7 +86,6 @@ namespace StoreUI
             {
                 Console.WriteLine($"Failed to checkout cart. {e.Message}");
             }
-            
         }
     }
 }

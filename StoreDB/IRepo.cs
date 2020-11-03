@@ -1,6 +1,6 @@
 namespace StoreDB
 {
-    public interface IRepo : IShopRepo, ICustomerRepo, ILocationRepo
+    public interface IRepo : ICustomerRepo, ILocationRepo, ICartRepo, IAdminRepo
     {
          
     }

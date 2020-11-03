@@ -8,15 +8,9 @@ namespace StoreDB
     public interface ILocationRepo
     {
         Location GetLocation();
-        Task<List<InvItem>> GetInventory();
-        void AddCartItem(CartItem item);
-        void RemoveFromCart(int index);
-        void EmptyCart();
-        Task<Cart> GetCart();
-        void RemoveInventory(InvItem invItem);
-        void AddOrderToLocation(Order order);
+        List<InvItem> GetInventory();
+        void RemoveInventory(int productId, int quantity);
         void AddNewProduct(InvItem invItem);
         void AddToProductQuantity(int index, int quantityAdded);
-        void PlaceOrder(Order order);
     }
 }

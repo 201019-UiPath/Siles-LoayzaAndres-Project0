@@ -1,14 +1,14 @@
-﻿using StoreDB;
 using System.Collections.Generic;
+using StoreDB;
 using StoreDB.Models;
 
 namespace StoreLib
 {
-    public class ShopService
+    public class AdminService
     {
-        protected IShopRepo repo;
+        IAdminRepo repo;
 
-        public ShopService(IShopRepo repo)
+        public AdminService(IAdminRepo repo)
         {
             this.repo = repo;
         }
@@ -23,11 +23,9 @@ namespace StoreLib
             return repo.GetLocations().Result;
         }
 
-        /*
-        public bool HasLocation(int index)
+        public List<Order> GetOrders()
         {
-            return repo.HasLocation(index);
+            return repo.GetLocationOrders();
         }
-        */
     }
 }

@@ -8,5 +8,10 @@ namespace StoreDB.Models
         public string UserName {get; set;}
         public Address Address {get; set;}
         public List<Order> Orders {get; set;}
+
+        public Customer()
+        {
+            Orders = new List<Order>();
+        }
     }
 }

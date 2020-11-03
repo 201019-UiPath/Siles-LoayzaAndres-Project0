@@ -28,7 +28,11 @@ namespace StoreDB.Models
 
         public List<Order> Orders {get; set;}
 
-        //public Dictionary<int, Cart> Carts {get; set;}
+        public Location()
+        {
+            Inventory = new List<InvItem>();
+            Orders = new List<Order>();
+        }
 
     }
 }

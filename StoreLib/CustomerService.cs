@@ -5,9 +5,18 @@ using StoreDB.Models;
 
 namespace StoreLib
 {
-    public class CustomerService : ShopService
+    public class CustomerService
     {
-        public CustomerService(IShopRepo repo) : base(repo) {}
+        private ICustomerRepo repo;
+        public CustomerService(ICustomerRepo repo)
+        {
+            this.repo = repo;
+        }
+
+        public List<Location> GetLocations()
+        {
+            return repo.GetLocations().Result;
+        }
 
         public void WriteOrders()
         {
