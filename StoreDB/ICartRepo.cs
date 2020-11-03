@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using StoreDB.Models;
 
 namespace StoreDB
@@ -5,9 +6,10 @@ namespace StoreDB
     public interface ICartRepo
     {
         void AddCartItem(CartItem item);
-        void RemoveProductFromCart(int productId);
-        void EmptyCart();
-        Cart GetCart();
-        void PlaceOrder(Order order);
+        void RemoveCartItem(CartItem item);
+        void EmptyCart(int cartId);
+        Cart GetCart(int customerId, int locationId);
+        List<CartItem> GetCartItems(int cartId);
+        void PlaceOrder(int locationId, int cartId, Order order);
     }
 }

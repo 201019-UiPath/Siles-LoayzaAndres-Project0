@@ -3,12 +3,19 @@ using StoreDB;
 using System.Text.RegularExpressions;
 using StoreDB.Models;
 using System.Collections.Generic;
+using StoreLib;
 
 namespace StoreUI
 {
-    internal class CartMenu : CustomerLocationMenu
+    internal class CartMenu : Menu
     {
-        public CartMenu(ILocationRepo repo) : base(repo) {}
+        CartService cartService;
+        
+        public CartMenu(CartService cartService)
+        {
+            this.cartService = cartService;
+        }
+
         public override void Start()
         {
             do
@@ -41,15 +48,15 @@ namespace StoreUI
 
         private void RemoveProduct()
         {
-            Console.Write("Enter product number to remove, or X to go back: ");
-            Cart cart = cartService.GetCart();
-            cart.Write();
+            Console.WriteLine("\nEnter product number to remove, or X to go back: ");
+            List<CartItem> items = cartService.GetCartItems();
+            cartService.WriteCart();
             userInput = Console.ReadLine();
             if (!UserInputIsX() && UserInputIsInt())
             {
                 try
                 {
-                    cartService.RemoveProductFromCart(cart.Items[int.Parse(userInput)].ProductId);
+                    cartService.RemoveCartItem(items[int.Parse(userInput)]);
                     Console.WriteLine("Removed product from cart.");
                 }
                 catch (Exception e)

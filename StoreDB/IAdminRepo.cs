@@ -7,7 +7,5 @@ namespace StoreDB
     public interface IAdminRepo : IStoreRepo
     {
         void AddLocation(Location location);
-
-        List<Order> GetLocationOrders();
     }
 }

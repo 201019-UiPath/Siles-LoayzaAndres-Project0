@@ -7,7 +7,5 @@ namespace StoreDB
     public interface IStoreRepo
     {
          Task<List<Location>> GetLocations();
-
-         ILocationRepo SetCurrentLocation(Location location);
     }
 }

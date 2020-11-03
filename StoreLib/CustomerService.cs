@@ -8,9 +8,12 @@ namespace StoreLib
     public class CustomerService
     {
         private ICustomerRepo repo;
-        public CustomerService(ICustomerRepo repo)
+        public Customer Customer {get; private set;}
+
+        public CustomerService(ICustomerRepo repo, Customer customer)
         {
             this.repo = repo;
+            this.Customer = customer;
         }
 
         public List<Location> GetLocations()
@@ -20,7 +23,7 @@ namespace StoreLib
 
         public void WriteOrders()
         {
-            List<Order> orders = this.repo.GetCustomerOrders();
+            List<Order> orders = this.repo.GetCustomerOrders(Customer.Id);
             foreach(Order o in orders)
             {
                 o.Write();

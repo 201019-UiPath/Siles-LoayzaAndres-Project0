@@ -7,19 +7,22 @@ using System.Collections.Generic;
 
 namespace StoreUI
 {
-    internal class AdminLocationMenu : CustomerLocationMenu
+    internal class AdminLocationMenu : Menu
     {
         AdminService adminService;
-        public AdminLocationMenu(ILocationRepo repo, AdminService adminService) : base(repo)
+        LocationService locationService;
+
+        public AdminLocationMenu(ILocationRepo repo, AdminService adminService, Location location) 
         {
             this.adminService = adminService;
+            this.locationService = new LocationService(repo, location);
         }
         
         public override void Start()
         {
             do
             {
-                Console.WriteLine($"\nWelcome to our {locationService.GetName()} location, admin!");
+                Console.WriteLine($"\nWelcome to our {locationService.Location.Name} location, admin!");
                 Console.WriteLine("[0] View inventory");
                 Console.WriteLine("[1] Add quantity");
                 Console.WriteLine("[2] Add new product");
@@ -46,22 +49,21 @@ namespace StoreUI
 
         protected void AddInvItem()
         {
+            Console.WriteLine("\nSelect a product to add quantity. Enter X to go back.");
+            List<InvItem> inventory = locationService.GetInventory();
             locationService.WriteInventory();
             do 
             {
-                Console.WriteLine("\nSelect a product to add quantity. Enter X to go back.");
                 userInput = Console.ReadLine();
-                Product product;
-                if(UserInputIsInt())
+                if(UserInputIsInt() && int.Parse(userInput)<inventory.Count)
                 {
                     try
                     {
-                        int productIndex = int.Parse(userInput);
-                        product = locationService.GetProductByIndex(productIndex);
-                        Console.WriteLine($"\nAdding quantity to {product.Name}.");
+                        InvItem item = inventory[int.Parse(userInput)];
+                        Console.WriteLine($"\nAdding quantity to {item.Product.Name}.");
                         Console.Write("Enter quantity being added: ");
                         int quantityAdded = int.Parse(Console.ReadLine());
-                        locationService.AddToInvItem(productIndex, quantityAdded);
+                        locationService.AddToInvItem(item.ProductId, quantityAdded);
                     }
                     catch (Exception e)
                     {
@@ -113,7 +115,7 @@ namespace StoreUI
 
         protected void ViewOrders()
         {
-            List<Order> orders = adminService.GetOrders();
+            List<Order> orders = locationService.GetOrders();
             Console.WriteLine($"Viewing {orders.Count} orders.");
             foreach(Order o in orders)
             {

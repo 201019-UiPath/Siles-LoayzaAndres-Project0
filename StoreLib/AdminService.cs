@@ -22,10 +22,5 @@ namespace StoreLib
         {
             return repo.GetLocations().Result;
         }
-
-        public List<Order> GetOrders()
-        {
-            return repo.GetLocationOrders();
-        }
     }
 }

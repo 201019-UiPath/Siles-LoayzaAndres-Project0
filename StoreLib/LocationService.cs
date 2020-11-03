@@ -13,24 +13,18 @@ namespace StoreLib
     public class LocationService
     {
         private ILocationRepo repo;
+        public Location Location {get; private set;}
 
-        public LocationService(ILocationRepo repo)
+        public LocationService(ILocationRepo repo, Location location)
         {
             this.repo = repo;
-        }
-
-        /// <summary>
-        /// Returns the name of this Location.
-        /// </summary>
-        /// <returns></returns>
-        public string GetName()
-        {
-            return repo.GetLocation().Name;
+            this.Location = location;
         }
 
         public void AddNewProductToInventory(InvItem invItem)
         {
-            if (!HasProduct(invItem.Product))
+            invItem.LocationId = Location.Id;
+            if (!HasProduct(invItem.ProductId))
             {
                 repo.AddNewProduct(invItem);
             }
@@ -39,9 +33,14 @@ namespace StoreLib
             }
         }
 
+        public List<InvItem> GetInventory()
+        {
+            return repo.GetInventory(Location.Id);
+        }
+
         public void WriteInventory()
         {
-            List<InvItem> inventory = repo.GetInventory();
+            List<InvItem> inventory = GetInventory();
             int i=0;
             foreach(var item in inventory)
             {
@@ -58,12 +57,12 @@ namespace StoreLib
         /// </summary>
         /// <param name="product"></param>
         /// <returns>true if given Product is in this Inventory</returns>
-        public bool HasProduct(Product product)
+        public bool HasProduct(int productId)
         {
-            List<InvItem> inventory = repo.GetInventory();
+            List<InvItem> inventory = repo.GetInventory(Location.Id);
             foreach(var invItem in inventory)
             {
-                if(invItem.Product.Equals(product))
+                if(invItem.Product.Id == productId)
                 {
                     return true;
                 }
@@ -71,21 +70,14 @@ namespace StoreLib
             return false;
         }
 
-        public Product GetProductByIndex(int index)
+        public void AddToInvItem(int productId, int quantityAdded)
         {
-            return repo.GetInventory()[index].Product;
+            repo.AddToProductQuantity(Location.Id, productId, quantityAdded);
         }
 
-        public void AddToInvItem(int index, int quantityAdded)
+        public List<Order> GetOrders()
         {
-            if (index<repo.GetInventory().Count)
-            {
-                repo.AddToProductQuantity(index, quantityAdded);
-            }
-            else
-            {
-                System.Console.WriteLine("Error! Product not found!");
-            }
+            return repo.GetLocationOrders(Location.Id);
         }
     }
 }

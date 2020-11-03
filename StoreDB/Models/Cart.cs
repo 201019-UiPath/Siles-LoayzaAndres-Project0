@@ -29,29 +29,5 @@ namespace StoreDB.Models
         {
             Items = new List<CartItem>();
         }
-
-        public void QuickWrite()
-        {
-            Console.WriteLine($"{Count} products in your cart.");
-            foreach(var invItem in Items)
-            {
-                Console.WriteLine($"{invItem.Product.Name}");
-                Console.WriteLine($"    Quantity: {invItem.Quantity}");
-            }
-            Console.WriteLine($"Subtotal: ${Cost}");
-        }
-
-        public void Write()
-        {
-            Console.WriteLine($"{Count} products in your cart.");
-            int i = 0;
-            foreach(var item in Items)
-            {
-                Console.Write($"[{i}] ");
-                item.Write();
-                i++;
-            }
-            Console.WriteLine($"Subtotal: ${Cost}");
-        }
     }
 }

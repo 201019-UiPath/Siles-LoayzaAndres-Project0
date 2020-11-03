@@ -15,10 +15,10 @@ namespace StoreUI
         protected ICustomerRepo repo;
         protected CustomerService service;
 
-        public CustomerMenu(ICustomerRepo repo)
+        public CustomerMenu(ICustomerRepo repo, Customer customer)
         {
             this.repo = repo;
-            this.service = new CustomerService(repo);
+            this.service = new CustomerService(repo, customer);
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace StoreUI
 
         protected void SelectLocation(Location location)
         {
-            subMenu = new CustomerLocationMenu(repo.SetCurrentLocation(location));
+            subMenu = new CustomerLocationMenu((ILocationRepo)repo, service.Customer, location);
             subMenu.Start();
         }
 

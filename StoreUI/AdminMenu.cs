@@ -44,7 +44,7 @@ namespace StoreUI
                 int index = int.Parse(userInput);
                 if (index<locations.Count)
                 {
-                    subMenu = new AdminLocationMenu(repo.SetCurrentLocation(locations[index]), service);
+                    subMenu = new AdminLocationMenu((ILocationRepo)repo, service, locations[index]);
                     subMenu.Start();
                 }
                 
@@ -65,7 +65,6 @@ namespace StoreUI
                 newLoc.Address.Zip = int.Parse(Console.ReadLine());
                 Console.Write("Enter country: ");
                 newLoc.Address.Country = Console.ReadLine();
-                newLoc.Inventory = new List<InvItem>();
                 this.service.AddLocation(newLoc);
                 Console.WriteLine($"New location {newLoc.Name} added!");
             }

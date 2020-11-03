@@ -9,8 +9,6 @@ namespace StoreDB
     public class DBRepo : IRepo
     {
         StoreContext context;
-        Customer currentCustomer;
-        Location currentLocation;
 
         public DBRepo(StoreContext context)
         {
@@ -25,9 +23,7 @@ namespace StoreDB
 
         public void AddNewProduct(InvItem invItem)
         {
-            Location loc = context.StoreLocations.Single(x => x.Id == currentLocation.Id);
-            loc.Inventory = new List<InvItem>();
-            loc.Inventory.Add(invItem);
+            context.InvItems.Add(invItem);
             context.SaveChanges();
         }
 
@@ -37,47 +33,45 @@ namespace StoreDB
             context.SaveChanges();
         }
 
-        public void AddToProductQuantity(int index, int quantityAdded)
+        public void AddToProductQuantity(int locationId, int productId, int quantityAdded)
         {
-            GetInventory()[index].Quantity += quantityAdded;
+            context.InvItems.Single(x => x.LocationId==locationId && x.ProductId==productId).Quantity += quantityAdded;
             context.SaveChanges();
         }
 
-        private void CreateCartIfItDoesNotExist()
+        private void CreateCartIfItDoesNotExist(int customerId, int locationId)
         {
-            if (!context.Carts.Any(x => x.CustomerId == currentCustomer.Id && x.LocationId == currentLocation.Id))
+            if (!context.Carts.Any(x => x.CustomerId==customerId && x.LocationId==locationId))
             {
                 Cart cart = new Cart();
-                cart.LocationId = currentLocation.Id;
-                cart.CustomerId = currentCustomer.Id;
+                cart.LocationId = locationId;
+                cart.CustomerId = customerId;
                 cart.Items = new List<CartItem>();
                 context.Carts.Add(cart);
                 context.SaveChanges();
             }
         }
 
-        public void EmptyCart()
+        public void EmptyCart(int cartId)
         {
-            GetCart().Items.Clear();
+            context.Carts.Include("Items").Single(x => x.Id==cartId).Items.Clear();
             context.SaveChanges();
         }
 
-        public Cart GetCart()
+        public Cart GetCart(int customerId, int locationId)
         {
-            CreateCartIfItDoesNotExist();
-            Cart cart = context.Carts.Single(x => x.CustomerId == currentCustomer.Id && x.LocationId == currentLocation.Id);
-            cart.Items = context.CartItems.Include("Product").Where(x => x.CartId == cart.Id).ToList();
-            return cart;
+            CreateCartIfItDoesNotExist(customerId, locationId);
+            return context.Carts.Single(x => x.CustomerId == customerId && x.LocationId == locationId);
         }
 
-        public Customer GetCustomer()
+        public List<CartItem> GetCartItems(int cartId)
         {
-            return currentCustomer;
+            return context.CartItems.Include("Product").Where(x => x.CartId==cartId).ToList();
         }
 
-        public List<Order> GetCustomerOrders()
+        public List<Order> GetCustomerOrders(int customerId)
         {
-            List<Order> orders = context.Orders.Where(x => x.CustomerId==currentCustomer.Id).ToList();
+            List<Order> orders = context.Orders.Where(x => x.CustomerId==customerId).ToList();
             foreach(Order o in orders)
             {
                 o.Items = context.OrderItems.Include("Product").Where(x => x.OrderId == o.Id).ToList();
@@ -85,14 +79,22 @@ namespace StoreDB
             return orders;
         }
 
-        public List<InvItem> GetInventory()
+        public Customer GetDefaultCustomer()
         {
-            return context.InvItems.Include("Product").Where(x => x.LocationId==currentLocation.Id).ToList();
+            if (!context.Customers.Any(x => true))
+            {
+                Customer customer = new Customer();
+                customer.UserName = "Andres";
+                customer.Address = new Address("123 Main Street", "Charles Town", "WV", 12345, "USA");
+                context.Customers.Add(customer);
+                context.SaveChanges();
+            }
+            return context.Customers.First(x => true);
         }
 
-        public Location GetLocation()
+        public List<InvItem> GetInventory(int locationId)
         {
-            return currentLocation;
+            return context.InvItems.Include("Product").Where(x => x.LocationId==locationId).ToList();
         }
 
         public Task<List<Location>> GetLocations()
@@ -100,9 +102,9 @@ namespace StoreDB
             return context.StoreLocations.Select(x => x).ToListAsync();
         }
 
-        public List<Order> GetLocationOrders()
+        public List<Order> GetLocationOrders(int locationId)
         {
-            List<Order> orders = context.Orders.Where(x => x.LocationId==currentLocation.Id).ToList();
+            List<Order> orders = context.Orders.Where(x => x.LocationId==locationId).ToList();
             foreach(Order o in orders)
             {
                 o.Items = context.OrderItems.Include("Product").Where(x => x.OrderId == o.Id).ToList();
@@ -111,16 +113,16 @@ namespace StoreDB
             return orders;
         }
 
-        public void PlaceOrder(Order order)
+        public void PlaceOrder(int locationId, int cartId, Order order)
         {
             using (var transaction = context.Database.BeginTransaction())
             {
-                foreach(CartItem item in GetCart().Items)
+                foreach(CartItem item in GetCartItems(cartId))
                 {
-                    RemoveInventory(item.ProductId, item.Quantity);
+                    ReduceInventory(locationId, item.ProductId, item.Quantity);
                 }
                 context.SaveChanges();
-                EmptyCart();
+                EmptyCart(cartId);
                 context.SaveChanges();
                 context.Orders.Add(order);
                 context.SaveChanges();
@@ -128,29 +130,16 @@ namespace StoreDB
             }
         }
 
-        public void RemoveProductFromCart(int productId)
+        public void RemoveCartItem(CartItem item)
         {
-            CartItem cartItem = context.CartItems.Single(x => x.ProductId == productId);
-            context.CartItems.Remove(cartItem);
+            context.CartItems.Remove(item);
             context.SaveChanges();
         }
 
-        public void RemoveInventory(int productId, int quantity)
+        public void ReduceInventory(int locationId, int productId, int quantity)
         {
-            context.InvItems.Single(x => x.LocationId==currentLocation.Id && x.Product.Id==productId).Quantity -= quantity;
+            context.InvItems.Single(x => x.LocationId==locationId && x.Product.Id==productId).Quantity -= quantity;
             context.SaveChanges();
-        }
-
-        public ICustomerRepo SetCurrentCustomer(int id)
-        {
-            currentCustomer = context.Customers.Single(x => x.Id == id);
-            return this;
-        }
-
-        public ILocationRepo SetCurrentLocation(Location location)
-        {
-            currentLocation = location;
-            return this;
         }
     }
 }

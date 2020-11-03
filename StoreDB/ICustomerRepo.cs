@@ -6,11 +6,8 @@ namespace StoreDB
 {
     public interface ICustomerRepo : IStoreRepo
     {
-        Customer GetCustomer();
+        Customer GetDefaultCustomer();
         
-        List<Order> GetCustomerOrders();
-
-        ICustomerRepo SetCurrentCustomer(int index);
-
+        List<Order> GetCustomerOrders(int customerId);
     }
 }

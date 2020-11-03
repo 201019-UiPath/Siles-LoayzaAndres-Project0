@@ -7,10 +7,10 @@ namespace StoreDB
     
     public interface ILocationRepo
     {
-        Location GetLocation();
-        List<InvItem> GetInventory();
-        void RemoveInventory(int productId, int quantity);
+        List<InvItem> GetInventory(int locationId);
+        void ReduceInventory(int locationId, int productId, int quantity);
         void AddNewProduct(InvItem invItem);
-        void AddToProductQuantity(int index, int quantityAdded);
+        void AddToProductQuantity(int locationId, int productId, int quantityAdded);
+        List<Order> GetLocationOrders(int locationId);
     }
 }

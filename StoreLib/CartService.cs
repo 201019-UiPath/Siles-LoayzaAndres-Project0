@@ -7,62 +7,70 @@ namespace StoreLib
 {
     public class CartService
     {
-        private ILocationRepo repo;
-        private ICustomerRepo customerRepo;
-        private ICartRepo cartRepo;
+        private ICartRepo repo;
+        public Customer Customer {get; private set;}
+        public Location Location {get; private set;}
+        public Cart Cart {get; private set;}
 
-        public CartService(ILocationRepo repo)
+        public CartService(ICartRepo repo, Customer customer, Location location)
         {
             this.repo = repo;
-            this.customerRepo = (ICustomerRepo)repo;
-            this.cartRepo = (ICartRepo)repo;
+            this.Customer = customer;
+            this.Location = location;
+            this.Cart = repo.GetCart(Customer.Id, Location.Id);
         }
 
         public void AddToCart(CartItem item)
         {
-            item.CartId = cartRepo.GetCart().Id;
-            cartRepo.AddCartItem(item);
+            item.CartId = Cart.Id;
+            repo.AddCartItem(item);
         }
 
-        public void RemoveProductFromCart(int productId)
+        public void RemoveCartItem(CartItem cartItem)
         {
-            cartRepo.RemoveProductFromCart(productId);
+            repo.RemoveCartItem(cartItem);
         }
 
         public void EmptyCart()
         {
-            cartRepo.EmptyCart();
+            repo.EmptyCart(Cart.Id);
         }
 
-        public Cart GetCart()
+        public List<CartItem> GetCartItems()
         {
-            return cartRepo.GetCart();
+            return repo.GetCartItems(Cart.Id);
         }
 
         public void WriteCart()
         {
-            cartRepo.GetCart().Write();
+            List<CartItem> items = GetCartItems();
+            Console.WriteLine($"{items.Count} products in your cart.");
+            int i = 0;
+            foreach(var item in items)
+            {
+                Console.Write($"[{i}] ");
+                item.Write();
+                i++;
+            }
+            Console.WriteLine($"Subtotal: ${Cart.Cost}");
         }
 
         public Order PlaceOrder()
         {
-            Location loc = repo.GetLocation();
-            Customer custom = customerRepo.GetCustomer();
-            Cart cart = cartRepo.GetCart();
             Order order = new Order();
-            order.LocationId = loc.Id;
-            order.CustomerId = custom.Id;
-            order.LocationAddress = loc.Address;
-            order.CustomerAddress = custom.Address;
+            order.LocationId = Location.Id;
+            order.CustomerId = Customer.Id;
+            order.LocationAddress = Location.Address;
+            order.CustomerAddress = Customer.Address;
             order.DateTime = DateTime.Now;
             order.Items = new List<OrderItem>();
-            foreach(CartItem c in cart.Items)
+            foreach(CartItem c in GetCartItems())
             {
                 order.Items.Add(new OrderItem(c.Product, c.Quantity));
             }
-            order.Cost = cart.Cost;
+            order.Cost = Cart.Cost;
 
-            cartRepo.PlaceOrder(order);
+            repo.PlaceOrder(Location.Id, Cart.Id, order);
             
             return order;
         }

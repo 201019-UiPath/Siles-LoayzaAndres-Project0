@@ -2,27 +2,30 @@ using System;
 using StoreDB;
 using StoreLib;
 using StoreDB.Models;
+using System.Collections.Generic;
 
 namespace StoreUI
 {
     internal class CustomerLocationMenu : Menu
     {
         private ILocationRepo repo;
+        protected CustomerService customerService;
         protected LocationService locationService;
         protected CartService cartService;
 
-        public CustomerLocationMenu(ILocationRepo repo)
+        public CustomerLocationMenu(ILocationRepo repo, Customer customer, Location location)
         {
             this.repo = repo;
-            this.locationService = new LocationService(repo);
-            this.cartService = new CartService(repo);
+            this.customerService = new CustomerService((ICustomerRepo)repo, customer);
+            this.locationService = new LocationService(repo, location);
+            this.cartService = new CartService((ICartRepo)repo, customer, location);
         }
 
         public override void Start()
         {
             do
             {
-                Console.WriteLine($"\nWelcome to our {locationService.GetName()} location!");
+                Console.WriteLine($"\nWelcome to our {locationService.Location.Name} location!");
                 Console.WriteLine("[0] Shop products");
                 Console.WriteLine("[1] Add product to cart");
                 Console.WriteLine("[2] Go to cart");
@@ -31,14 +34,14 @@ namespace StoreUI
                 switch (userInput)
                 {
                     case "0":
-                        Console.WriteLine($"\nViewing products for {locationService.GetName()} location.");
+                        Console.WriteLine($"\nViewing products for {locationService.Location.Name} location.");
                         locationService.WriteInventory();
                         break;
                     case "1":
                         AddProductToCart();
                         break;
                     case "2":
-                        subMenu = new CartMenu(repo);
+                        subMenu = new CartMenu(cartService);
                         subMenu.Start();
                         break;
                 }
@@ -47,15 +50,16 @@ namespace StoreUI
 
         private void AddProductToCart()
         {
+            Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
+            List<InvItem> inventory = locationService.GetInventory();
+            locationService.WriteInventory();
             do 
             {
-                Console.WriteLine("\nEnter product number to add to cart, or enter X to go back.");
                 userInput = Console.ReadLine();
-                if (UserInputIsInt())
+                if (UserInputIsInt() && int.Parse(userInput)<inventory.Count)
                 {
-                    int index = int.Parse(userInput);
-                    Product product = locationService.GetProductByIndex(index);
-                    AddProductQuantity(product);
+                    InvItem item = inventory[int.Parse(userInput)];
+                    AddProductQuantity(item.Product);
                 }
                 else if (!UserInputIsX())
                 {
