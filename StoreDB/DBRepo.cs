@@ -23,7 +23,7 @@ namespace StoreDB
 
         public void AddLocation(Location location)
         {
-            context.StoreLocations.Add(location);
+            context.Locations.Add(location);
             context.SaveChanges();
         }
 
@@ -87,7 +87,7 @@ namespace StoreDB
 
         public List<Location> GetLocations()
         {
-            return context.StoreLocations.Select(x => x).ToList();
+            return context.Locations.Select(x => x).ToList();
         }
 
         public List<Order> GetOrdersAscend(Func<Order, bool> where, Func<Order, Object> orderBy)

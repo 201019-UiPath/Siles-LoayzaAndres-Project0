@@ -7,7 +7,7 @@ namespace StoreDB
 {
     public class StoreContext : DbContext
     {
-        public DbSet<Location> StoreLocations {get; set;}
+        public DbSet<Location> Locations {get; set;}
         public DbSet<Customer> Customers {get; set;}
         public DbSet<Cart> Carts {get; set;}
         public DbSet<InvItem> InvItems {get; set;}
