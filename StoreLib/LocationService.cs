@@ -26,7 +26,7 @@ namespace StoreLib
             invItem.LocationId = Location.Id;
             if (!HasProduct(invItem.ProductId))
             {
-                repo.AddNewProduct(invItem);
+                repo.AddInvItem(invItem);
             }
             else {
                 System.Console.WriteLine("Error! Product already exists!");
@@ -72,7 +72,7 @@ namespace StoreLib
 
         public void AddToInvItem(int productId, int quantityAdded)
         {
-            repo.AddToProductQuantity(Location.Id, productId, quantityAdded);
+            repo.AddToInvItemQuantity(Location.Id, productId, quantityAdded);
         }
 
         private void WriteOrders(List<Order> orders)

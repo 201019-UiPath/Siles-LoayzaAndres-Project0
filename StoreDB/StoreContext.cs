@@ -17,6 +17,10 @@ namespace StoreDB
         public DbSet<Order> Orders {get; set;}
         public DbSet<Address> Addresses {get; set;}
 
+        public StoreContext(){}
+
+        public StoreContext(DbContextOptions<StoreContext> options) : base(options){}
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if( !optionsBuilder.IsConfigured )

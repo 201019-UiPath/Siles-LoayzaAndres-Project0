@@ -27,7 +27,7 @@ namespace StoreDB
             context.SaveChanges();
         }
 
-        public void AddNewProduct(InvItem invItem)
+        public void AddInvItem(InvItem invItem)
         {
             context.InvItems.Add(invItem);
             context.SaveChanges();
@@ -39,7 +39,7 @@ namespace StoreDB
             context.SaveChanges();
         }
 
-        public void AddToProductQuantity(int locationId, int productId, int quantityAdded)
+        public void AddToInvItemQuantity(int locationId, int productId, int quantityAdded)
         {
             context.InvItems.Single(x => x.LocationId==locationId && x.ProductId==productId).Quantity += quantityAdded;
             context.SaveChanges();
