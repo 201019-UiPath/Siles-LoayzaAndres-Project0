@@ -6,6 +6,10 @@ using StoreDB.Models;
 
 namespace StoreDB
 {
+    /// <summary>
+    /// Implementation of IRepo methods using a database management system.
+    /// Uses EF Core and DbContext to store and access data for the store.
+    /// </summary>
     public class DBRepo : IRepo
     {
         StoreContext context;

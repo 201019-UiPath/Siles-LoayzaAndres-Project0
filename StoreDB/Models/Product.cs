@@ -3,28 +3,28 @@
 namespace StoreDB.Models
 {
     /// <summary>
-    /// Represents an individual product
+    /// Represents a unique product. Includes a name, description, and price.
     /// </summary>
     public class Product
     {
         /// <summary>
-        /// ID number for this Product
+        /// ID number for this Product.
         /// </summary>
         public int Id {get; set;}
 
         /// <summary>
-        /// Price in USD for this product
+        /// Price in USD for this Product.
         /// </summary>
         private decimal price;
         public decimal Price { get{return price;} set{price=decimal.Round(value, 2);} }
 
         /// <summary>
-        /// Short descriptive name for product
+        /// Short descriptive name for this Product.
         /// </summary>
         public string Name {get; set;}
 
         /// <summary>
-        /// Description for product
+        /// Description for this Product.
         /// </summary>
         public string Description {get; set;}
 
