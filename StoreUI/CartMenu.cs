@@ -90,10 +90,11 @@ namespace StoreUI
 
         private void Checkout()
         {
-            Console.WriteLine("Starting checkout. Enter X to cancel any time.");
+            Console.WriteLine("Starting checkout...");
             try
             {
                 Order order = cartService.PlaceOrder();
+                Console.WriteLine("Order successfully processed!");
                 Log.Information($"Placed an order from {@cartService.Cart} in CartMenu");
             }
             catch (Exception e)
