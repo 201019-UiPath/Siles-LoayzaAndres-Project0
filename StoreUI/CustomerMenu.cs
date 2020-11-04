@@ -4,6 +4,7 @@ using StoreLib;
 using System.Collections.Generic;
 using StoreDB.Models;
 using System.Text.RegularExpressions;
+using Serilog;
 
 namespace StoreUI
 {
@@ -27,6 +28,7 @@ namespace StoreUI
         /// </summary>
         public override void Start()
         {
+            Log.Debug("Started CustomerMenu instance");
             do
             {
                 Console.WriteLine("\nSelect a store location or view orders.");

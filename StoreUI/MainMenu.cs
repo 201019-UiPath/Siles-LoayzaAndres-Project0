@@ -1,6 +1,7 @@
 using System;
 using StoreDB;
 using StoreDB.Models;
+using Serilog;
 
 namespace StoreUI
 {
@@ -15,7 +16,7 @@ namespace StoreUI
 
         public override void Start()
         {
-
+            Log.Debug("Started MainMenu instance");
             do
             {
                 Console.WriteLine("\nWelcome!");

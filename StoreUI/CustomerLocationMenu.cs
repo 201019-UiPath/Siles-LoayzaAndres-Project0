@@ -3,6 +3,7 @@ using StoreDB;
 using StoreLib;
 using StoreDB.Models;
 using System.Collections.Generic;
+using Serilog;
 
 namespace StoreUI
 {
@@ -23,6 +24,7 @@ namespace StoreUI
 
         public override void Start()
         {
+            Log.Debug("Starting CustomerLocationMenu instance");
             do
             {
                 Console.WriteLine($"\nWelcome to our {locationService.Location.Name} location!");
@@ -78,10 +80,12 @@ namespace StoreUI
                     {
                         cartService.AddToCart(new CartItem(product, quantity));
                         Console.WriteLine($"Added {quantity} of {product.Name} to cart.");
+                        Log.Information($"Added {@product} to {@cartService.Cart} in CustomerLocationMenu");
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine($"Failed to add {product.Name} to cart. {e.Message}");
+                        Log.Error($"Failed to add {@product} to {@cartService.Cart} in CustomerLocationMenu. {e.Message}");
                     }
                     break;
                 }

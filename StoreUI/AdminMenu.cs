@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using StoreDB;
 using StoreDB.Models;
 using StoreLib;
+using Serilog;
 
 namespace StoreUI
 {
@@ -21,6 +22,7 @@ namespace StoreUI
 
         public override void Start()
         {
+            Log.Debug("Started AdminMenu instance");
             do
             {
                 Console.WriteLine("\nWelcome to the admin store selection!");
@@ -67,6 +69,7 @@ namespace StoreUI
                 newLoc.Address.Country = Console.ReadLine();
                 this.service.AddLocation(newLoc);
                 Console.WriteLine($"New location {newLoc.Name} added!");
+                Log.Information($"Added {@newLoc} in AdminMenu");
             }
             else if (!UserInputIsX())
             {

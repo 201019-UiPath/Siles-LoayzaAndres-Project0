@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using StoreDB.Models;
 using System.Collections.Generic;
 using StoreLib;
+using Serilog;
 
 namespace StoreUI
 {
@@ -18,6 +19,7 @@ namespace StoreUI
 
         public override void Start()
         {
+            Log.Debug("Started CartMenu instance");
             do
             {
                 Console.WriteLine("\nWelcome to your cart.");
@@ -54,14 +56,17 @@ namespace StoreUI
             userInput = Console.ReadLine();
             if (!UserInputIsX() && UserInputIsInt())
             {
+                CartItem item = items[int.Parse(userInput)];
                 try
                 {
-                    cartService.RemoveCartItem(items[int.Parse(userInput)]);
-                    Console.WriteLine("Removed product from cart.");
+                    cartService.RemoveCartItem(item);
+                    Console.WriteLine($"Removed {item.Product.Name} from cart.");
+                    Log.Information($"Removed {@item} from {@cartService.Cart} in CartMenu");
                 }
                 catch (Exception e)
                 {
                     Console.WriteLine($"Failed to remove product from cart. {e.Message}");
+                    Log.Error($"Failed to remove {@item} from {@cartService.Cart} in CartMenu. {e.Message}");
                 }   
             }
         }
@@ -75,6 +80,7 @@ namespace StoreUI
             {
                 cartService.EmptyCart();
                 Console.WriteLine("Action confirmed. Emptied cart.");
+                Log.Information($"Removed all items in {@cartService.Cart} in CartMenu");
             }
             else
             {
@@ -88,10 +94,12 @@ namespace StoreUI
             try
             {
                 Order order = cartService.PlaceOrder();
+                Log.Information($"Placed an order from {@cartService.Cart} in CartMenu");
             }
             catch (Exception e)
             {
                 Console.WriteLine($"Failed to checkout cart. {e.Message}");
+                Log.Error($"Failed to place an order from {@cartService.Cart} in CartMenu. {e.Message}");
             }
         }
     }

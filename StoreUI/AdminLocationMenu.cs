@@ -4,6 +4,7 @@ using System.Text.RegularExpressions;
 using StoreDB.Models;
 using StoreLib;
 using System.Collections.Generic;
+using Serilog;
 
 namespace StoreUI
 {
@@ -20,6 +21,7 @@ namespace StoreUI
         
         public override void Start()
         {
+            Log.Debug("Started AdminLocationMenu instance");
             do
             {
                 Console.WriteLine($"\nWelcome to our {locationService.Location.Name} location, admin!");
@@ -57,18 +59,20 @@ namespace StoreUI
                 userInput = Console.ReadLine();
                 if(UserInputIsInt() && int.Parse(userInput)<inventory.Count)
                 {
+                    InvItem item = inventory[int.Parse(userInput)];
                     try
                     {
-                        InvItem item = inventory[int.Parse(userInput)];
                         Console.WriteLine($"\nAdding quantity to {item.Product.Name}.");
                         Console.Write("Enter quantity being added: ");
                         int quantityAdded = int.Parse(Console.ReadLine());
                         locationService.AddToInvItem(item.ProductId, quantityAdded);
+                        Log.Information($"Added {@item} to {@locationService.Location} in AdminLocationMenu");
                     }
                     catch (Exception e)
                     {
                         Console.WriteLine(e.Message);
                         Console.WriteLine("Failed to add quantity.");
+                        Log.Error($"Failed to add {@item} to {@locationService.Location} in AdminLocationMenu. {e.Message}");
                     }
                 }
                 else 
@@ -104,6 +108,7 @@ namespace StoreUI
             {
                 locationService.AddNewProductToInventory(newInvItem);
                 Console.WriteLine("New product added!");
+                Log.Information($"Added {@newInvItem} to {@locationService.Location} in AdminLocationMenu");
             }
             else
             {
