@@ -51,11 +51,11 @@ namespace StoreUI
 
         protected void AddInvItem()
         {
-            Console.WriteLine("\nSelect a product to add quantity. Enter X to go back.");
-            List<InvItem> inventory = locationService.GetInventory();
-            locationService.WriteInventory();
             do 
             {
+                Console.WriteLine("\nSelect a product to add quantity. Enter X to go back.");
+                List<InvItem> inventory = locationService.GetInventory();
+                locationService.WriteInventory();
                 userInput = Console.ReadLine();
                 if(UserInputIsInt() && int.Parse(userInput)<inventory.Count)
                 {
@@ -66,6 +66,7 @@ namespace StoreUI
                         Console.Write("Enter quantity being added: ");
                         int quantityAdded = int.Parse(Console.ReadLine());
                         locationService.AddToInvItem(item.ProductId, quantityAdded);
+                        Console.WriteLine($"Added {quantityAdded} to {item.Product.Name}.");
                         Log.Information($"Added {@item} to {@locationService.Location} in AdminLocationMenu");
                     }
                     catch (Exception e)
@@ -75,7 +76,7 @@ namespace StoreUI
                         Log.Error($"Failed to add {@item} to {@locationService.Location} in AdminLocationMenu. {e.Message}");
                     }
                 }
-                else 
+                else if (!UserInputIsX())
                 {
                     Console.WriteLine("Invalid input. Please enter an integer.");
                 }
